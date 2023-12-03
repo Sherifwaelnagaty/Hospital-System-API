@@ -1,25 +1,26 @@
-using Algoriza_Project_2023BE83.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Algoriza_Project_2023BE83.Models;
 using Algoriza_Project_2023BE83.Data;
+using Core.Service;
+using Core.Domain;
 namespace Algoriza_Project_2023BE83.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class CouponsController : ControllerBase
 {
-    private readonly ICouponsRepository _couponsRepository;
-    public CouponsController(ICouponsRepository couponsRepository)
+    private readonly ICouponsService _couponsRepository;
+    public CouponsController(ICouponsService couponsRepository)
     {
         _couponsRepository = couponsRepository;
     }
     [HttpPost("")]
-    public async Task<IActionResult> AddCoupon([FromBody] CouponsModel couponModel)
+    public async Task<IActionResult> AddCoupon([FromBody] Coupons couponModel)
     {
         var couponId = await _couponsRepository.AddCoupon(couponModel);
         return Ok(couponId);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCoupon(int id, [FromBody] CouponsModel couponModel)
+    public async Task<IActionResult> UpdateCoupon(int id, [FromBody] Coupons couponModel)
     {
         await _couponsRepository.UpdateCoupon(id, couponModel);
         return Ok();

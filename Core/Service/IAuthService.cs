@@ -10,5 +10,6 @@ namespace Core.Service
     public interface IAuthService
     {
         Task<Auth> RegisterAsync(Register model);
+       
     }
 }

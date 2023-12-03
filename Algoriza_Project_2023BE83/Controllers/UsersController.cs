@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Algoriza_Project_2023BE83.Models;
 using Algoriza_Project_2023BE83.Data;
 using Core.Service;
+using Core.Domain;
 namespace Algoriza_Project_2023BE83.Controllers;
 [Route("api/[controller]")]
 [ApiController]
@@ -13,13 +14,13 @@ public class UsersController : ControllerBase
         _patientsService = patientsService;
     }
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] Usersmodel usersmodel)
+    public async Task<IActionResult> Register([FromBody] Users usersmodel)
     {
         await _patientsService.Register(usersmodel);
         return Ok();
     }
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] Usersmodel usersmodel)
+    public async Task<IActionResult> Login([FromBody] Users usersmodel)
     {
         await _patientsService.Login(usersmodel);
         return Ok();

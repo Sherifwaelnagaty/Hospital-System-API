@@ -52,6 +52,17 @@ namespace Service
                 return new Auth { Message = errors };
             }
             await _userManager.AddToRoleAsync(user, "User");
+            
+            var jwtSecurityToken = await CreateJwtToken(user);
+            return new Auth
+            {
+                Email = user.Email,
+                ExpiresOn =jwtSecurityToken.ValidTo,
+                IsAuthenticated = true,
+                Roles = new List<string> { "User" },
+                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                UserName = user.UserName,
+            };
         }
         private async Task<JwtSecurityToken> CreateJwtToken(Users user)
         {

@@ -6,6 +6,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Service;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace Algoriza_Project_2023BE83
 {
@@ -35,16 +43,16 @@ namespace Algoriza_Project_2023BE83
             }).AddJwtBearer(o =>
             {
                 o.RequireHttpsMetadata = false;
-                o.saveToken = false;
+                o.SaveToken = false;
                 o.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    ValidIssuer = Configuration("JWT:Issuer"),
-                    ValidAudience = Configuration("JWT:Audience"),
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UUTF8.GetBytes(_configuration["JWT:Key"]))
+                    ValidIssuer = Configuration["JWT:Issuer"],
+                    ValidAudience = Configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]))
                 };
             });
         }
