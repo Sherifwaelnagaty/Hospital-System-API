@@ -13,7 +13,7 @@ public class DoctorsServices : IDoctorsService
         {
             _context = context;
         }
-        public async Task<List<Doctorsmodel>> GetAllDoctors(){
+        public async Task<List<Doctors>> GetAllDoctors(){
         var doctors = await _context.Doctors.Select(x=> new Doctorsmodel(){
             gender = x.gender,
             Id = x.Id,
@@ -26,7 +26,7 @@ public class DoctorsServices : IDoctorsService
         }).ToListAsync();
         return doctors;
         }
-        public async Task<Doctorsmodel> GetDoctorById(int id){
+        public async Task<Doctors> GetDoctorById(int id){
             var doctor = await _context.Doctors.Where(x=>x.Id == id).Select(x=> new Doctorsmodel(){
                 gender = x.gender,
                 Id = x.Id,
@@ -39,8 +39,8 @@ public class DoctorsServices : IDoctorsService
             }).FirstOrDefaultAsync();
             return doctor;
         }
-        public async Task<int> AddDoctor(Doctorsmodel doctorModel){
-            var doctor = new Doctorsmodel(){
+        public async Task<int> AddDoctor(Doctors doctorModel){
+            var doctor = new Doctors(){
 
                 gender = doctorModel.gender,
                 Id = doctorModel.Id,
@@ -55,7 +55,7 @@ public class DoctorsServices : IDoctorsService
             await _context.SaveChangesAsync();
             return doctor.Id;
         }
-        public async Task UpdateDoctorById(int id,Doctorsmodel doctorModel){
+        public async Task UpdateDoctorById(int id,Doctors doctorModel){
             var doctor = await _context.Doctors.FindAsync(id);
             if(doctor != null){
                 var Updated_doctor = new Doctorsmodel(){
@@ -80,29 +80,4 @@ public class DoctorsServices : IDoctorsService
             }
         }
 
-    public Task Login(Doctors doctorModel)
-    {
-        throw new NotImplementedException();
-    }
-
-
-    public Task<int> AddDoctor(Doctors doctorModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateDoctorById(int id, Doctors doctorModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<List<Doctors>> IDoctorsService.GetAllDoctors()
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<Doctors> IDoctorsService.GetDoctorById(int id)
-    {
-        throw new NotImplementedException();
-    }
 }

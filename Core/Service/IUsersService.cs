@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Core.Domain;
-using Algoriza_Project_2023BE83.Models;
 namespace Core.Service;
 public interface IUsersService
 {

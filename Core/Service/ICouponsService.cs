@@ -1,4 +1,3 @@
-using Algoriza_Project_2023BE83.Models;
 using Core.Domain;
 namespace Core.Service;
 public interface ICouponsService
