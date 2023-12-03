@@ -1,0 +1,6 @@
+@Algoriza_Project_2023BE83_HostAddress = http://localhost:5129
+
+GET {{Algoriza_Project_2023BE83_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
