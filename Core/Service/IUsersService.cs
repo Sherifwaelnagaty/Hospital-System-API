@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using Core.Domain;
+using Microsoft.AspNetCore.Mvc;
 namespace Core.Service;
 public interface IUsersService
 {

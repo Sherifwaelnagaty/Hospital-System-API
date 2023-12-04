@@ -4,7 +4,7 @@ using Algoriza_Project_2023BE83.Models;
 using Algoriza_Project_2023BE83.Data;
 using Core.Service;
 using Core.Domain;
-namespace Service.Data;
+namespace Service.Service;
 class UsersServices : IUsersService
 {
     private readonly UsersContext _context;
@@ -15,9 +15,11 @@ class UsersServices : IUsersService
     }
     public async Task<bool> Register(Users usersmodel)
     {
-        if(usersmodel != null){
-            var user = new Users(){
-                Id = usersmodel.Id,
+        if (usersmodel != null)
+        {
+            var user = new Usersmodel()
+            {
+                //Id = usersmodel.Id,
                 FirstName = usersmodel.FirstName,
                 LastName = usersmodel.LastName,
                 Password = usersmodel.Password,
@@ -26,39 +28,39 @@ class UsersServices : IUsersService
                 Image = usersmodel.Image,
                 Dateofbirth = usersmodel.Dateofbirth
             };
-            var result = _context.Users.Add(user);
-            if(result != null){
-                await _context.SaveChangesAsync();
-                return true;
-            }
+            //var result = _context.Users.Add(user);
+            //if(result != null){
+            await _context.SaveChangesAsync();
+            return true;
+            //}
         }
         return false;
     }
-    public async Task<List<Users>> GetAllUsers()
-    {
-        var patients = await _context.Users.Select(x=>new Users(){
-            Id = x.Id,
-            FirstName = x.FirstName,
-            LastName = x.LastName,
-            Phone = x.Phone,
-            Image = x.Image,
-            Dateofbirth = x.Dateofbirth
-        }).ToListAsync();
-        return patients;
-    }
-    public async Task<Users> GetPatientByIdAsync(string id)
-    {
-        var patient = await _context.Users.Where(x=>x.Id==id).Select(x=>new Users(){
-            Id = x.Id,
-            FirstName = x.FirstName,
-            LastName = x.LastName,
-            Phone = x.Phone,
-            Image = x.Image,
-            Dateofbirth = x.Dateofbirth,
-            gender = x.gender
-        }).FirstOrDefaultAsync();
-        return patient;
-    }
+    //public async Task<List<Users>> GetAllUsers()
+    // {
+    //var patients = await _context.Users.Select(x=>new Users(){
+    //Id = x.Id,
+    //FirstName = x.FirstName,
+    //LastName = x.LastName,
+    //Phone = x.Phone,
+    //Image = x.Image,
+    //  Dateofbirth = x.Dateofbirth
+    //}).ToListAsync();
+    //return patients;
+    //}
+    //public async Task<Users> GetPatientByIdAsync(string id)
+    //{
+    //var patient = await _context.Users.Where(x=>x.Id==id).Select(x=>new Users(){
+    //Id = x.Id,
+    //FirstName = x.FirstName,
+    //LastName = x.LastName,
+    //Phone = x.Phone,
+    //Image = x.Image,
+    //Dateofbirth = x.Dateofbirth,
+    //gender = x.gender
+    //}).FirstOrDefaultAsync();
+    //return patient;
+    //}
 
     public Task<bool> Login(Users usersmodel)
     {

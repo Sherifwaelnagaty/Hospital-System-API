@@ -2,7 +2,7 @@ using Algoriza_Project_2023BE83.Data;
 using Algoriza_Project_2023BE83.Models;
 using Core.Domain;
 using Core.Service;
-namespace Service.Data;
+namespace Service.Service;
 public class CouponsServices : ICouponsService
 {
     private readonly CouponsContext _context;

@@ -1,4 +1,5 @@
 ﻿using Algoriza_Project_2023BE83.Models;
+using Core.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Algoriza_Project_2023BE83.Data
@@ -10,7 +11,7 @@ namespace Algoriza_Project_2023BE83.Data
 
         }
 
-        public DbSet<CouponsModel> Coupons { get; set; }
+        public DbSet<Coupons> Coupons { get; set; }
 
     }
 }

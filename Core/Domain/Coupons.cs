@@ -2,7 +2,7 @@ namespace Core.Domain;
 public class Coupons
 {
     public int Id { get; set; }
-    public string? Code { get; set; }
+    public string Code { get; set; }
     public int DiscountType { get; set; }
     public int MaxUses { get; set; }
     public int Uses { get; set; }

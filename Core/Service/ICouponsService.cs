@@ -1,4 +1,5 @@
 using Core.Domain;
+
 namespace Core.Service;
 public interface ICouponsService
 {

@@ -1,4 +1,3 @@
-using Algoriza_Project_2023BE83.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Algoriza_Project_2023BE83.Models;
 using Algoriza_Project_2023BE83.Data;
@@ -34,18 +33,19 @@ class DoctorsController : ControllerBase
     public async Task<IActionResult> AddDoctor([FromBody] Doctors doctorModel)
     {
         var id = await _doctorsRepository.AddDoctor(doctorModel);
-        return CreatedAtAction(nameof(GetDoctorById), new { id = id }, controller= "doctor" , id);
+        return CreatedAtAction(nameof(GetDoctorById), new { id = id });
     }
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDoctorById([FromRoute] int id, [FromBody] Doctors doctorModel)
+    public async Task<IActionResult> UpdateDoctorById([FromRoute] int id, [FromBody] Doctors doctorModel, IDoctorsService _doctorsRepository)
     {
-        var doctor = await _doctorsRepository.UpdateDoctorById(id, doctorModel);
-        return Ok(doctor);
+        //var doctor = await _doctorsRepository.UpdateDoctorById(id, doctorModel);
+        return Ok();
     }
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorById([FromRoute] int id)
     {
-        var doctor = await _doctorsRepository.DeleteDoctorById(id);
-        return Ok(doctor);
+        //var doctor = await _doctorsRepository.DeleteDoctorById(id);
+        return Ok();
     }
 }

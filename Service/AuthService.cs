@@ -1,5 +1,4 @@
 ﻿using Algoriza_Project_2023BE83.Helpers;
-using Algoriza_Project_2023BE83.Models;
 using Core.Domain;
 using Core.Service;
 using Microsoft.AspNetCore.Identity;
@@ -13,28 +12,29 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service
+
+namespace Service.Service
 {
     public class AuthService : IAuthService
     {
         private readonly UserManager<Users> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JWT _jwt;
-        public AuthService (UserManager<Users> userManager,IOptions<JWT>jwt, RoleManager<IdentityRole> roleManager) 
-        { 
+        public AuthService(UserManager<Users> userManager, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager)
+        {
             _userManager = userManager;
             _jwt = jwt.Value;
             _roleManager = roleManager;
         }
 
-        public async Task<string> AddRoleAsync(AddRoleModel model)
+        public async Task<string> AddRoleAsync(AddRole model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user == null|| !await _roleManager.RoleExistsAsync(model.Role))
+            if (user == null || !await _roleManager.RoleExistsAsync(model.Role))
             {
                 return "Invalid user ID or Role";
             }
-            if(await _userManager.IsInRoleAsync(user, model.Role))
+            if (await _userManager.IsInRoleAsync(user, model.Role))
             {
                 return "User already assigned to this role";
             }
@@ -46,7 +46,6 @@ namespace Service
             }
             return "Something went wrong";
         }
-
         public async Task<Auth> LoginAsync(Login model)
         {
             var auth = new Auth();
@@ -60,8 +59,8 @@ namespace Service
             var rolesList = await _userManager.GetRolesAsync(user);
             auth.IsAuthenticated = true;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            auth.Email = user.Email;
-            auth.UserName = user.UserName;
+            //auth.Email = user.Email;
+            //auth.UserName = user.UserName;
             auth.ExpiresOn = jwtSecurityToken.ValidTo;
             auth.Roles = rolesList.ToList();
             return auth;
@@ -69,7 +68,7 @@ namespace Service
 
         public async Task<Auth> RegisterAsync(Register model)
         {
-            if (await _userManager.FindByEmailAsync(model.Email) is not null) 
+            if (await _userManager.FindByEmailAsync(model.Email) is not null)
             {
                 return new Auth { Message = "Email is already registered!" };
             }
@@ -79,13 +78,13 @@ namespace Service
             }
             var user = new Users
             {
-                UserName = model.Username,
-                Email = model.Email,
+                //UserName = model.Username,
+                //Email = model.Email,
                 FirstName = model.FirstName,
-                LastName = model.LastName,                
+                LastName = model.LastName,
             };
-            var result = await _userManager.CreateAsync(user,model.Password);
-            if(!result.Succeeded)
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
             {
                 var errors = string.Empty;
                 foreach (var error in result.Errors)
@@ -95,16 +94,16 @@ namespace Service
                 return new Auth { Message = errors };
             }
             await _userManager.AddToRoleAsync(user, "User");
-            
+
             var jwtSecurityToken = await CreateJwtToken(user);
             return new Auth
             {
-                Email = user.Email,
-                ExpiresOn =jwtSecurityToken.ValidTo,
+                //Email = user.Email,
+                ExpiresOn = jwtSecurityToken.ValidTo,
                 IsAuthenticated = true,
                 Roles = new List<string> { "User" },
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                UserName = user.UserName,
+                //UserName = user.UserName,
             };
         }
         private async Task<JwtSecurityToken> CreateJwtToken(Users user)
@@ -118,10 +117,10 @@ namespace Service
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                //new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id)
+                //new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                //new Claim("uid", user.Id)
             }
             .Union(userClaims)
             .Union(roleClaims);
@@ -140,5 +139,4 @@ namespace Service
         }
     }
 
-}
 }

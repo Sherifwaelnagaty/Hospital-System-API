@@ -14,7 +14,7 @@ namespace Algoriza_Project_2023BE83.Controllers
             _authService = authService;
         }
 
-        [HttpGet("Register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] Register model)
         {
             if (!ModelState.IsValid)
