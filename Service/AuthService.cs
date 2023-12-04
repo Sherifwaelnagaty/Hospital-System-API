@@ -1,9 +1,9 @@
-﻿using Algoriza_Project_2023BE83.Helpers;
-using Core.Domain;
+﻿using Core.Domain;
 using Core.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Repository.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -59,8 +59,8 @@ namespace Service.Service
             var rolesList = await _userManager.GetRolesAsync(user);
             auth.IsAuthenticated = true;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            //auth.Email = user.Email;
-            //auth.UserName = user.UserName;
+            auth.Email = user.Email;
+            auth.UserName = user.UserName;
             auth.ExpiresOn = jwtSecurityToken.ValidTo;
             auth.Roles = rolesList.ToList();
             return auth;
@@ -78,8 +78,8 @@ namespace Service.Service
             }
             var user = new Users
             {
-                //UserName = model.Username,
-                //Email = model.Email,
+                UserName = model.Username,
+                Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
             };
@@ -98,12 +98,12 @@ namespace Service.Service
             var jwtSecurityToken = await CreateJwtToken(user);
             return new Auth
             {
-                //Email = user.Email,
+                Email = user.Email,
                 ExpiresOn = jwtSecurityToken.ValidTo,
                 IsAuthenticated = true,
                 Roles = new List<string> { "User" },
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                //UserName = user.UserName,
+                UserName = user.UserName,
             };
         }
         private async Task<JwtSecurityToken> CreateJwtToken(Users user)
@@ -117,10 +117,10 @@ namespace Service.Service
 
             var claims = new[]
             {
-                //new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                //new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                //new Claim("uid", user.Id)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("uid", user.Id)
             }
             .Union(userClaims)
             .Union(roleClaims);

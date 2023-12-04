@@ -1,20 +1,24 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Algoriza_Project_2023BE83.Data;
-using Core.Service;
-using Core.Domain;
-namespace Service.Service;
-public class DoctorsServices : IDoctorsService
-{
-    private readonly DoctorsContext _context;
 
-    public DoctorsServices(DoctorsContext context)
+using Microsoft.EntityFrameworkCore;
+using Core.Domain;
+using Core.Repository;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+namespace Repository;
+public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
+{
+    private readonly ApplicationContext _context;
+    private DbSet<T> entities;
+
+    public DoctorsRepository(ApplicationContext context)
     {
         _context = context;
+        entities = context.Set<T>();
     }
     public async Task<List<Doctors>> GetAllDoctors()
     {
-        var doctors = await _context.Doctors.Select(x => new Doctors()
+        var doctors = await entities.Select(x => new Doctors()
         {
             gender = x.gender,
             FirstName = x.FirstName,
@@ -26,9 +30,9 @@ public class DoctorsServices : IDoctorsService
         }).ToListAsync();
         return doctors;
     }
-    public async Task<Doctors> GetDoctorById(int id)
+    public async Task<Doctors> GetDoctorById(string id)
     {
-        var doctor = await _context.Doctors.Where(x => x == x).Select(x => new Doctors()
+        var doctor = await entities.Where(x => x.Id == id).Select(x => new Doctors()
         {
             gender = x.gender,
             FirstName = x.FirstName,
@@ -53,13 +57,13 @@ public class DoctorsServices : IDoctorsService
             Image = doctorModel.Image,
             Dateofbirth = doctorModel.Dateofbirth
         };
-        _context.Doctors.Add(doctor);
+        entities.Add((T) doctor);
         await _context.SaveChangesAsync();
         return doctor;
     }
     public async Task UpdateDoctorById(int id, Doctors doctorModel)
     {
-        var doctor = await _context.Doctors.FindAsync(id);
+        var doctor = await entities.FindAsync(id);
         if (doctor != null)
         {
             var Updated_doctor = new Doctors()
@@ -72,18 +76,22 @@ public class DoctorsServices : IDoctorsService
                 Image = doctorModel.Image,
                 Dateofbirth = doctorModel.Dateofbirth
             };
-            _context.Doctors.Update(Updated_doctor);
+            entities.Update((T)Updated_doctor);
             await _context.SaveChangesAsync();
         }
     }
     public async Task DeleteDoctorById(int id)
     {
-        var doctor = await _context.Doctors.FindAsync(id);
+        var doctor = await entities.FindAsync(id);
         if (doctor != null)
         {
-            _context.Doctors.Remove(doctor);
+            entities.Remove(doctor);
             await _context.SaveChangesAsync();
         }
     }
 
+    public Task<Doctors> GetDoctorById(int id)
+    {
+        throw new System.NotImplementedException();
+    }
 }

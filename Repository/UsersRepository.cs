@@ -1,15 +1,14 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Algoriza_Project_2023BE83.Models;
-using Algoriza_Project_2023BE83.Data;
-using Core.Service;
 using Core.Domain;
-namespace Service.Service;
-class UsersServices : IUsersService
+using Core.Repository;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+namespace Repository;
+class UsersRepository : IUsersRepository
 {
-    private readonly UsersContext _context;
+    private readonly ApplicationContext _context;
 
-    public UsersServices(UsersContext context)
+    public UsersRepository(ApplicationContext context)
     {
         _context = context;
     }
@@ -17,7 +16,7 @@ class UsersServices : IUsersService
     {
         if (usersmodel != null)
         {
-            var user = new Usersmodel()
+            var user = new Users()
             {
                 //Id = usersmodel.Id,
                 FirstName = usersmodel.FirstName,
@@ -64,16 +63,16 @@ class UsersServices : IUsersService
 
     public Task<bool> Login(Users usersmodel)
     {
-        throw new NotImplementedException();
+        throw new System.NotImplementedException();
     }
 
     public Task<List<Users>> GetAllPatients()
     {
-        throw new NotImplementedException();
+        throw new System.NotImplementedException();
     }
 
     public Task<Users> GetPatientByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        throw new System.NotImplementedException();
     }
 }

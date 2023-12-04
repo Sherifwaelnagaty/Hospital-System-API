@@ -1,19 +1,12 @@
-using Algoriza_Project_2023BE83.Data;
-using Algoriza_Project_2023BE83.Helpers;
-using Algoriza_Project_2023BE83.Models;
-using Core.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Service;
+using Core.Domain;
+using Repository;
+using Repository.Helpers;
 
 namespace Algoriza_Project_2023BE83
 {
@@ -30,11 +23,11 @@ namespace Algoriza_Project_2023BE83
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<JWT>(Configuration.GetSection("JWT"));
-            services.AddIdentity<Usersmodel, IdentityRole>().AddEntityFrameworkStores<UsersContext>();
-            services.AddDbContext<UsersContext>(options =>
+            services.AddIdentity<Users, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
+            services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
-            services.AddScoped<IAuthService, AuthService>();
+            //services.AddScoped<IAuthService,AuthService>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =JwtBearerDefaults.AuthenticationScheme;

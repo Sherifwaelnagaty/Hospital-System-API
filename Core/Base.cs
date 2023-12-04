@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.Domain
 {
-    public class Base : IdentityDbContext
+    public class Base : IdentityUser
     {
 
         [Required, MaxLength(50)]

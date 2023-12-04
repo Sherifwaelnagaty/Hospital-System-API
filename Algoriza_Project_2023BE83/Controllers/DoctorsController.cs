@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Algoriza_Project_2023BE83.Models;
-using Algoriza_Project_2023BE83.Data;
-using Core.Service;
 using Core.Domain;
+using Core.Repository;
 namespace Algoriza_Project_2023BE83.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 class DoctorsController : ControllerBase
 {
-    private readonly IDoctorsService _doctorsRepository;
-    public DoctorsController(IDoctorsService doctorsRepository)
+    private readonly IDoctorsRepository<Doctors> _doctorsRepository;
+    public DoctorsController(IDoctorsRepository<Doctors> doctorsRepository)
     {
         _doctorsRepository = doctorsRepository;
     }
@@ -37,7 +36,7 @@ class DoctorsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDoctorById([FromRoute] int id, [FromBody] Doctors doctorModel, IDoctorsService _doctorsRepository)
+    public async Task<IActionResult> UpdateDoctorById([FromRoute] int id, [FromBody] Doctors doctorModel, IDoctorsRepository<Doctors> _doctorsRepository)
     {
         //var doctor = await _doctorsRepository.UpdateDoctorById(id, doctorModel);
         return Ok();

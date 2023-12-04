@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Algoriza_Project_2023BE83.Models;
-using Algoriza_Project_2023BE83.Data;
-using Core.Service;
 using Core.Domain;
+using Core.Repository;
 namespace Algoriza_Project_2023BE83.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly IUsersService _patientsService;
-    public UsersController(IUsersService patientsService)
+    private readonly IUsersRepository _patientsService;
+    public UsersController(IUsersRepository patientsService)
     {
         _patientsService = patientsService;
     }

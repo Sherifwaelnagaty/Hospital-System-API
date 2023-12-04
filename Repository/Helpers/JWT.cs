@@ -1,4 +1,4 @@
-namespace Algoriza_Project_2023BE83.Helpers;
+namespace Repository.Helpers;
 public class JWT{
     public string Key { get; set; }
     public string Issuer { get; set; }

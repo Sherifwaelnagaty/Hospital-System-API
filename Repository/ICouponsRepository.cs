@@ -1,7 +1,8 @@
 using Core.Domain;
+using System.Threading.Tasks;
 
-namespace Core.Service;
-public interface ICouponsService
+namespace Core.Repository;
+public interface ICouponsRepository
 {
     Task<int> AddCoupon(Coupons couponModel);
     Task UpdateCoupon(int id, Coupons couponModel);

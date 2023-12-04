@@ -1,7 +1,8 @@
 using Core.Domain;
-using Microsoft.AspNetCore.Mvc;
-namespace Core.Service;
-public interface IUsersService
+using System.Collections.Generic;
+using System.Threading.Tasks;
+namespace Core.Repository;
+public interface IUsersRepository
 {
     Task<List<Users>> GetAllPatients();
     Task<Users> GetPatientByIdAsync(int id);
