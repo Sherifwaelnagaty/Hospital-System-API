@@ -1,14 +1,17 @@
 using Core.Domain;
 using Core.Repository;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace Repository;
-public class CouponsRepository : ICouponsRepository
+public class CouponsRepository<T> : ICouponsRepository<T> where T : Coupons
 {
     private readonly ApplicationContext _context;
+    private DbSet<T> entities;
     public CouponsRepository(ApplicationContext context)
     {
         _context = context;
+        entities = context.Set<T>();
     }
     public async Task<int> AddCoupon(Coupons couponModel)
     {
@@ -22,47 +25,41 @@ public class CouponsRepository : ICouponsRepository
             IsEnabled = couponModel.IsEnabled,
             Value = couponModel.Value
         };
-        _context.Add(coupon);
+        entities.Add((T)coupon);
         await _context.SaveChangesAsync();
         return coupon.Id;
     }
-    public async Task UpdateCoupon(System.Type id, Coupons couponModel)
+    public async Task UpdateCoupon(string id, Coupons couponModel)
     {
-        var coupon = await _context.FindAsync(id);
-        //coupon.Code = couponModel.Code;
-        //coupon.DiscountType = couponModel.DiscountType;
-        //coupon.MaxUses = couponModel.MaxUses;
-        //coupon.Uses = couponModel.Uses;
-        //coupon.ExpirationDate = couponModel.ExpirationDate;
-        //coupon.IsEnabled = couponModel.IsEnabled;
-        //coupon.Value = couponModel.Value;
+        var coupon = await entities.FindAsync(id);
+        coupon.Code = couponModel.Code;
+        coupon.DiscountType = couponModel.DiscountType;
+        coupon.MaxUses = couponModel.MaxUses;
+        coupon.Uses = couponModel.Uses;
+        coupon.ExpirationDate = couponModel.ExpirationDate;
+        coupon.IsEnabled = couponModel.IsEnabled;
+        coupon.Value = couponModel.Value;
         await _context.SaveChangesAsync();
     }
-    public async Task DeleteCoupon(System.Type id)
+    public async Task DeleteCoupon(string id)
     {
-        var coupon = await _context.FindAsync(id);
-        _context.Remove(coupon);
-        await _context.SaveChangesAsync();
-    }
-    public async Task DeactivateCoupon(System.Type id)
-    {
-        var coupon = await _context.FindAsync(id);
-        //coupon.IsEnabled = false;
-        await _context.SaveChangesAsync();
+        var coupon = await entities.FindAsync(id);
+        if (coupon != null)
+        {
+            entities.Remove(coupon);
+            await _context.SaveChangesAsync();
+        }
     }
 
-    public Task UpdateCoupon(int id, Coupons couponModel)
+    public async Task DeactivateCoupon(string id)
     {
-        throw new System.NotImplementedException();
+        var coupon = await entities.FindAsync(id);
+        if (coupon != null)
+        {
+            coupon.IsEnabled = false;
+            await _context.SaveChangesAsync();
+        }
     }
 
-    public Task DeleteCoupon(int id)
-    {
-        throw new System.NotImplementedException();
-    }
 
-    public Task DeactivateCoupon(int id)
-    {
-        throw new System.NotImplementedException();
-    }
 }

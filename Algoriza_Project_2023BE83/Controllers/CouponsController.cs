@@ -7,8 +7,8 @@ namespace Algoriza_Project_2023BE83.Controllers;
 [ApiController]
 public class CouponsController : ControllerBase
 {
-    private readonly ICouponsRepository _couponsRepository;
-    public CouponsController(ICouponsRepository couponsRepository)
+    private readonly ICouponsRepository<Coupons> _couponsRepository;
+    public CouponsController(ICouponsRepository<Coupons> couponsRepository)
     {
         _couponsRepository = couponsRepository;
     }
@@ -19,19 +19,19 @@ public class CouponsController : ControllerBase
         return Ok(couponId);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCoupon(int id, [FromBody] Coupons couponModel)
+    public async Task<IActionResult> UpdateCoupon(string id, [FromBody] Coupons couponModel)
     {
         await _couponsRepository.UpdateCoupon(id, couponModel);
         return Ok();
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCoupon(int id)
+    public async Task<IActionResult> DeleteCoupon(string id)
     {
         await _couponsRepository.DeleteCoupon(id);
         return Ok();
     }
     [HttpPut("deactivate/{id}")]
-    public async Task<IActionResult> DeactivateCoupon(int id)
+    public async Task<IActionResult> DeactivateCoupon(string id)
     {
         await _couponsRepository.DeactivateCoupon(id);
         return Ok();

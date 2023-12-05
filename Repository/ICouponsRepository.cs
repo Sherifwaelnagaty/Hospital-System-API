@@ -2,10 +2,10 @@ using Core.Domain;
 using System.Threading.Tasks;
 
 namespace Core.Repository;
-public interface ICouponsRepository
+public interface ICouponsRepository<T> where T : Coupons
 {
     Task<int> AddCoupon(Coupons couponModel);
-    Task UpdateCoupon(int id, Coupons couponModel);
-    Task DeleteCoupon(int id);
-    Task DeactivateCoupon(int id);
+    Task UpdateCoupon(string id, Coupons couponModel);
+    Task DeleteCoupon(string id);
+    Task DeactivateCoupon(string id);
 }

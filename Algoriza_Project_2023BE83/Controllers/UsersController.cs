@@ -7,33 +7,21 @@ namespace Algoriza_Project_2023BE83.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
-    private readonly IUsersRepository _patientsService;
-    public UsersController(IUsersRepository patientsService)
+    private readonly IUsersRepository<Users> _patientsService;
+    public UsersController(IUsersRepository<Users> patientsService)
     {
         _patientsService = patientsService;
-    }
-    [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] Users usersmodel)
-    {
-        await _patientsService.Register(usersmodel);
-        return Ok();
-    }
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] Users usersmodel)
-    {
-        await _patientsService.Login(usersmodel);
-        return Ok();
     }
     [HttpGet("")]
     public async Task<IActionResult> GetAllPatients()
     {
-        var patients = await _patientsService.GetAllPatients();
+        var patients = await _patientsService.GetAllUsers();
         return Ok(patients);
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetPatientById([FromRoute]int id)
+    public async Task<IActionResult> GetPatientById([FromRoute]string id)
     {
-        var patient = await _patientsService.GetPatientByIdAsync(id);
+        var patient = await _patientsService.GetUserByIdAsync(id);
         if (patient == null)
         {
             return NotFound();

@@ -2,10 +2,8 @@ using Core.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 namespace Core.Repository;
-public interface IUsersRepository
+public interface IUsersRepository<T> where T : Users
 {
-    Task<List<Users>> GetAllPatients();
-    Task<Users> GetPatientByIdAsync(int id);
-    Task<bool> Register(Users usersmodel);
-    Task<bool> Login(Users usersmodel);
+    Task<List<Users>> GetAllUsers();
+    Task<Users> GetUserByIdAsync(string id);
 }

@@ -7,6 +7,8 @@ using System.Text;
 using Core.Domain;
 using Repository;
 using Repository.Helpers;
+using Core.Service;
+using Service.Service;
 
 namespace Algoriza_Project_2023BE83
 {
@@ -27,7 +29,7 @@ namespace Algoriza_Project_2023BE83
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
-            //services.AddScoped<IAuthService,AuthService>();
+            services.AddScoped<IAuthService,AuthService>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =JwtBearerDefaults.AuthenticationScheme;
