@@ -1,9 +1,14 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
-namespace Algoriza_Project_2023BE83.Models;
-public class Usersmodel: BaseModel {
+using System.ComponentModel.DataAnnotations;
 
-    public string Password { get; set; }
-    public string ConfirmPassword { get; set; }
-    
+namespace Algoriza_Project_2023BE83.Models
+{
+    public class UsersModel : IdentityUser
+    {
+        [Required, MaxLength(50)]
+        public string FirstName { get; set; }
+
+        [Required, MaxLength(50)]
+        public string LastName { get; set; }
+    }
 }

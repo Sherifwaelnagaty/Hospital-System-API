@@ -1,7 +1,6 @@
 ﻿using Core;
 using Core.Domain;
 using Microsoft.EntityFrameworkCore;
-using Repository.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +17,6 @@ namespace Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            new UsersMap(modelBuilder.Entity<Users>());
             new DoctorsMap(modelBuilder.Entity<Doctors>());
             new CouponsMap(modelBuilder.Entity<Coupons>());
 

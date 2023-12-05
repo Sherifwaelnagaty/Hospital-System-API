@@ -7,10 +7,10 @@ using System.Linq;
 namespace Repository;
 class UsersRepository<T> : IUsersRepository<T> where T : Users
 {
-    private readonly ApplicationContext _context;
+    private readonly UsersContext _context;
     private DbSet<T> entities;
 
-    public UsersRepository(ApplicationContext context)
+    public UsersRepository(UsersContext context)
     {
         _context = context;
         entities = context.Set<T>();
@@ -22,9 +22,7 @@ class UsersRepository<T> : IUsersRepository<T> where T : Users
             Id = x.Id,
             FirstName = x.FirstName,
             LastName = x.LastName,
-            Phone = x.Phone,
-            Image = x.Image,
-            Dateofbirth = x.Dateofbirth
+            PhoneNumber = x.PhoneNumber,
         }).ToListAsync();
         return patients;
     }
@@ -35,10 +33,7 @@ class UsersRepository<T> : IUsersRepository<T> where T : Users
             Id = x.Id,
             FirstName = x.FirstName,
             LastName = x.LastName,
-            Phone = x.Phone,
-            Image = x.Image,
-            Dateofbirth = x.Dateofbirth,
-            gender = x.gender
+            PhoneNumber = x.PhoneNumber,
         }).FirstOrDefaultAsync();
         return patient;
     }

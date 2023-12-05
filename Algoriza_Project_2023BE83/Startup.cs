@@ -9,6 +9,7 @@ using Repository;
 using Repository.Helpers;
 using Core.Service;
 using Service.Service;
+using Core.Repository;
 
 namespace Algoriza_Project_2023BE83
 {
@@ -25,11 +26,15 @@ namespace Algoriza_Project_2023BE83
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<JWT>(Configuration.GetSection("JWT"));
-            services.AddIdentity<Users, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
-            services.AddDbContext<ApplicationContext>(options =>
+            services.AddIdentity<Users, IdentityRole>().AddEntityFrameworkStores<UsersContext>();
+            services.AddDbContext<UsersContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
-            services.AddScoped<IAuthService,AuthService>();
+            services.AddTransient<IAuthService,AuthService>();
+            services.AddMvc();
+            services.AddDbContext<ApplicationContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddScoped < typeof(IDoctorsRepository<>), typeof(DoctorsRepository<>)();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =JwtBearerDefaults.AuthenticationScheme;
@@ -51,7 +56,7 @@ namespace Algoriza_Project_2023BE83
             });
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TestApiJWT", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Algoriza_Project_2023BE83", Version = "v1" });
             });
         }
 

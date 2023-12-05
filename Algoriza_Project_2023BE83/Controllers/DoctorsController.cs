@@ -19,7 +19,7 @@ class DoctorsController : ControllerBase
         return Ok(doctors);
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetDoctorById([FromRoute]int id)
+    public async Task<IActionResult> GetDoctorById([FromRoute]string id)
     {
         var doctor = await _doctorsRepository.GetDoctorById(id);
         if (doctor == null)
@@ -36,15 +36,15 @@ class DoctorsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDoctorById([FromRoute] int id, [FromBody] Doctors doctorModel, IDoctorsRepository<Doctors> _doctorsRepository)
+    public async Task<IActionResult> UpdateDoctorById([FromRoute] string id, [FromBody] Doctors doctorModel, IDoctorsRepository<Doctors> _doctorsRepository)
     {
-        //var doctor = await _doctorsRepository.UpdateDoctorById(id, doctorModel);
-        return Ok();
+        var doctor = await _doctorsRepository.UpdateDoctorById(id, doctorModel);
+        return Ok(doctor);
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteDoctorById([FromRoute] int id)
+    public async Task<IActionResult> DeleteDoctorById([FromRoute] string id)
     {
-        //var doctor = await _doctorsRepository.DeleteDoctorById(id);
-        return Ok();
+        var doctor = await _doctorsRepository.DeleteDoctorById(id);
+        return Ok(doctor);
     }
 }

@@ -61,7 +61,7 @@ public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
         await _context.SaveChangesAsync();
         return doctor;
     }
-    public async Task UpdateDoctorById(int id, Doctors doctorModel)
+    public async Task<bool> UpdateDoctorById(string id, Doctors doctorModel)
     {
         var doctor = await entities.FindAsync(id);
         if (doctor != null)
@@ -78,20 +78,20 @@ public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
             };
             entities.Update((T)Updated_doctor);
             await _context.SaveChangesAsync();
+            return true;
         }
+        return false;
     }
-    public async Task DeleteDoctorById(int id)
+    public async Task<bool> DeleteDoctorById(string id)
     {
         var doctor = await entities.FindAsync(id);
         if (doctor != null)
         {
             entities.Remove(doctor);
             await _context.SaveChangesAsync();
+            return true;
         }
+        return false;
     }
 
-    public Task<Doctors> GetDoctorById(int id)
-    {
-        throw new System.NotImplementedException();
-    }
 }

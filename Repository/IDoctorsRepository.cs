@@ -5,8 +5,8 @@ namespace Core.Repository;
 public interface IDoctorsRepository<T> where T : Doctors
 {
     Task<List<Doctors>> GetAllDoctors();
-    Task<Doctors> GetDoctorById(int id);
+    Task<Doctors> GetDoctorById(string id);
     Task<Doctors> AddDoctor(Doctors doctorModel);
-    Task UpdateDoctorById(int id, Doctors doctorModel);
-    Task DeleteDoctorById(int id);
+    Task<bool> UpdateDoctorById(string id, Doctors doctorModel);
+    Task<bool> DeleteDoctorById(string id);
 }

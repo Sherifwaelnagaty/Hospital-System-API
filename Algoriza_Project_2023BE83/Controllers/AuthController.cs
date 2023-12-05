@@ -14,7 +14,7 @@ namespace Algoriza_Project_2023BE83.Controllers
             _authService = authService;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] Register model)
         {
             if (!ModelState.IsValid)
@@ -22,13 +22,13 @@ namespace Algoriza_Project_2023BE83.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _authService.RegisterAsync(model);
-            if (result.IsAuthenticated)
+            if (!result.IsAuthenticated)
             {
                 return BadRequest(result.Message);
             }
             return Ok(result);
         }
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login model)
         {
             if(!ModelState.IsValid)
@@ -36,7 +36,7 @@ namespace Algoriza_Project_2023BE83.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _authService.LoginAsync(model);
-            if (result.IsAuthenticated)
+            if (!result.IsAuthenticated)
             {
                 return BadRequest(result.Message);
             }

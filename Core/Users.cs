@@ -2,10 +2,13 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 namespace Core.Domain;
 
-public class Users : Base
+public class Users : IdentityUser
 {
 
-    public string Password { get; set; }
-    public string ConfirmPassword { get; set; }
+    [Required, MaxLength(50)]
+    public string FirstName { get; set; }
+
+    [Required, MaxLength(50)]
+    public string LastName { get; set; }
 
 }
