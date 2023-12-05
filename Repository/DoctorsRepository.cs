@@ -1,17 +1,18 @@
 
 using Microsoft.EntityFrameworkCore;
 using Core.Domain;
-using Core.Repository;
+using Core.Service;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-namespace Repository;
-public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
+using Repository;
+namespace Service;
+public class DoctorsService<T> : IDoctorsRepository<T> where T : Doctors
 {
     private readonly ApplicationContext _context;
     private DbSet<T> entities;
 
-    public DoctorsRepository(ApplicationContext context)
+    public DoctorsService(ApplicationContext context)
     {
         _context = context;
         entities = context.Set<T>();

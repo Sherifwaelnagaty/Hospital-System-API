@@ -16,7 +16,7 @@ namespace Core
             entityBuilder.Property(t => t.Days).IsRequired();
             entityBuilder.Property(t => t.Date).IsRequired();
             entityBuilder.Property(t=> t.Time).IsRequired();
-            entityBuilder.Property(t => t.price).IsRequired();
+            entityBuilder.Property(t => t.Price).IsRequired();
 
         }
     }

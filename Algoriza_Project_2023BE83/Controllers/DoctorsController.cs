@@ -1,27 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using Algoriza_Project_2023BE83.Models;
 using Core.Domain;
-using Core.Repository;
+using Service;
 namespace Algoriza_Project_2023BE83.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 class DoctorsController : ControllerBase
 {
-    private readonly IDoctorsRepository<Doctors> _doctorsRepository;
-    public DoctorsController(IDoctorsRepository<Doctors> doctorsRepository)
+    private readonly IDoctorService _doctorsService;
+    public DoctorsController(IDoctorService doctorsService)
     {
-        _doctorsRepository = doctorsRepository;
+        _doctorsService = doctorsService;
     }
     [HttpGet("")]
     public async Task<IActionResult> GetAllDoctors()
     {
-        var doctors = await _doctorsRepository.GetAllDoctors();
+        var doctors = await _doctorsService.GetAllDoctors();
         return Ok(doctors);
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetDoctorById([FromRoute]string id)
     {
-        var doctor = await _doctorsRepository.GetDoctorById(id);
+        var doctor = await _doctorsService.GetDoctorById(id);
         if (doctor == null)
         {
             return NotFound();
@@ -31,20 +31,20 @@ class DoctorsController : ControllerBase
     [HttpPost("")]
     public async Task<IActionResult> AddDoctor([FromBody] Doctors doctorModel)
     {
-        var id = await _doctorsRepository.AddDoctor(doctorModel);
+        var id = await _doctorsService.AddDoctor(doctorModel);
         return CreatedAtAction(nameof(GetDoctorById), new { id = id });
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDoctorById([FromRoute] string id, [FromBody] Doctors doctorModel, IDoctorsRepository<Doctors> _doctorsRepository)
+    public async Task<IActionResult> UpdateDoctorById([FromRoute] string id, [FromBody] Doctors doctorModel, IDoctorService _doctorsService)
     {
-        var doctor = await _doctorsRepository.UpdateDoctorById(id, doctorModel);
+        var doctor = await _doctorsService.UpdateDoctorById(id, doctorModel);
         return Ok(doctor);
     }
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorById([FromRoute] string id)
     {
-        var doctor = await _doctorsRepository.DeleteDoctorById(id);
+        var doctor = await _doctorsService.DeleteDoctorById(id);
         return Ok(doctor);
     }
 }

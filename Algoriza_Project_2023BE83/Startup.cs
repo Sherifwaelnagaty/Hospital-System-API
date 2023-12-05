@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Core.Domain;
-using Repository;
-using Repository.Helpers;
+using Service;
 using Core.Service;
 using Service.Service;
-using Core.Repository;
+using Repository;
+using Repository.Helpers;
 
 namespace Algoriza_Project_2023BE83
 {
@@ -31,10 +31,11 @@ namespace Algoriza_Project_2023BE83
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
             services.AddTransient<IAuthService,AuthService>();
+            services.AddTransient<IDoctorService,IDoctorService>();
             services.AddMvc();
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddScoped < typeof(IDoctorsRepository<>), typeof(DoctorsRepository<>)();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =JwtBearerDefaults.AuthenticationScheme;

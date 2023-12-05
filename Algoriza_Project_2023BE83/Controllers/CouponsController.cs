@@ -2,13 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using Algoriza_Project_2023BE83.Models;
 using Core.Domain;
 using Core.Repository;
+using Repository;
+using Service;
 namespace Algoriza_Project_2023BE83.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class CouponsController : ControllerBase
 {
-    private readonly ICouponsRepository<Coupons> _couponsRepository;
-    public CouponsController(ICouponsRepository<Coupons> couponsRepository)
+    private readonly ICouponsService _couponsRepository;
+    public CouponsController(ICouponsService couponsRepository)
     {
         _couponsRepository = couponsRepository;
     }

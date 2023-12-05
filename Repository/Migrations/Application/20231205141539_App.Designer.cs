@@ -12,7 +12,7 @@ using Repository;
 namespace Repository.Migrations.Application
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20231205140808_App")]
+    [Migration("20231205141539_App")]
     partial class App
     {
         /// <inheritdoc />
@@ -40,12 +40,12 @@ namespace Repository.Migrations.Application
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Time")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

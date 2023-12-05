@@ -4,13 +4,14 @@ using Core.Repository;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Service;
 namespace Repository;
-class UsersRepository<T> : IUsersRepository<T> where T : Users
+class PatientsRepository<T> : IPatientsRepository<T> where T : Users
 {
     private readonly UsersContext _context;
     private DbSet<T> entities;
 
-    public UsersRepository(UsersContext context)
+    public PatientsRepository(UsersContext context)
     {
         _context = context;
         entities = context.Set<T>();

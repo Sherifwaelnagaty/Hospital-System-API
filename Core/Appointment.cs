@@ -4,5 +4,5 @@ public class Appointment{
     public DateTime Date {get; set;}
     public List<string> Time {get; set;}
     public List<string> Days {get; set;}
-    public decimal price {get; set;}
+    public decimal Price {get; set;}
 }

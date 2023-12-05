@@ -1,7 +1,7 @@
 using Core.Domain;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-namespace Core.Repository;
+namespace Core.Service;
 public interface IDoctorsRepository<T> where T : Doctors
 {
     Task<List<Doctors>> GetAllDoctors();
