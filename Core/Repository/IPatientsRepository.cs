@@ -10,6 +10,6 @@ namespace Core.Repository
     public interface IPatientsRepository<T> where T : Patients
     {
         IEnumerable<T> GetAllPatients(int pageNumber, int pageSize);
-        T GetPatientsById(string id);
+        T GetPatientById(string id);
     }
 }
