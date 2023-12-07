@@ -12,7 +12,7 @@ using Repository.Data;
 namespace Repository.Migrations.Users
 {
     [DbContext(typeof(UsersContext))]
-    [Migration("20231207122849_Users")]
+    [Migration("20231207123506_Users")]
     partial class Users
     {
         /// <inheritdoc />
