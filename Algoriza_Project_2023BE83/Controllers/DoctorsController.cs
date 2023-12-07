@@ -1,7 +1,9 @@
 using Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 namespace Algoriza_Project_2023BE83.Controllers;
+[Authorize (Roles ="Admin")]
 [Route("api/[controller]")]
 [ApiController]
 public class DoctorsController : ControllerBase
@@ -31,6 +33,10 @@ public class DoctorsController : ControllerBase
     public async Task<IActionResult> AddDoctor([FromBody] Doctors doctorModel)
     {
         var id = _doctorsService.AddDoctor(doctorModel);
+        if (id == null) 
+        {
+            return BadRequest("An Error has occured");
+        }
         return CreatedAtAction(nameof(GetDoctorById), new { id = id, controllers = "doctors" },id);
     }
 
@@ -44,6 +50,10 @@ public class DoctorsController : ControllerBase
     public async Task<IActionResult> DeleteDoctorById([FromRoute] string id)
     {
         var doctor = await _doctorsService.DeleteDoctorById(id);
-        return Ok(doctor);
+        if(doctor==true) 
+        {
+            return Ok("Doctor's Account Deleted Successfully");
+        }
+        return BadRequest("An Error has occured");
     }
 }
