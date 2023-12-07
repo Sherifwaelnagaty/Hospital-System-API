@@ -21,9 +21,9 @@ namespace Service
             return _doctorsRepository.DeleteDoctorById(id);
         }
 
-        public IEnumerable<Doctors> GetAllDoctors()
+        public IEnumerable<Doctors> GetAllDoctors(int pageNumber, int pageSize)
         {
-            return _doctorsRepository.GetAllDoctors();
+            return  _doctorsRepository.GetAllDoctors(pageNumber, pageSize);
         }
 
         public Doctors GetDoctorById(string id)

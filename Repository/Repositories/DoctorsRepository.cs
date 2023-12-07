@@ -7,6 +7,7 @@ using Repository;
 using Core.Models;
 using Repository.Data;
 using System;
+using System.Drawing.Printing;
 namespace Service;
 public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
 {
@@ -18,10 +19,24 @@ public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
         _context = context;
         entities = context.Set<T>();
     }
-    public IEnumerable<T> GetAllDoctors()
+    public IEnumerable<T> GetAllDoctors(int pageNumber, int pageSize)
     {
-        return entities.AsEnumerable();
-        
+        if (pageNumber < 1)
+        {
+            throw new ArgumentException("Page number should be greater than or equal to 1.", nameof(pageNumber));
+        }
+
+        if (pageSize < 1)
+        {
+            throw new ArgumentException("Page size should be greater than or equal to 1.", nameof(pageSize));
+        }
+
+        // Calculate the number of items to skip
+        int itemsToSkip = (pageNumber - 1) * pageSize;
+
+        // Use Skip and Take for pagination
+        return entities.Skip(itemsToSkip).Take(pageSize).AsEnumerable();
+
     }
     public T GetDoctorById(string id)
     {

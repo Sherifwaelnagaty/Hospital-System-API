@@ -2,6 +2,7 @@ using Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service;
+using System.Drawing.Printing;
 namespace Algoriza_Project_2023BE83.Controllers;
 [Authorize (Roles ="Admin")]
 [Route("api/[controller]")]
@@ -14,9 +15,9 @@ public class DoctorsController : ControllerBase
         _doctorsService = doctorsService;
     }
     [HttpGet("")]
-    public async Task<IActionResult> GetAllDoctors()
+    public async Task<IActionResult> GetAllDoctors(int pageNumber, int pageSize)
     {
-        var doctors = _doctorsService.GetAllDoctors();
+        var doctors = _doctorsService.GetAllDoctors(pageNumber, pageSize);
         return Ok(doctors);
     }
     [HttpGet("{id}")]
