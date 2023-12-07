@@ -4,12 +4,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Core.Domain;
 using Service;
 using Core.Service;
 using Service.Service;
 using Repository;
 using Repository.Helpers;
+using Core.Models;
+using Repository.Data;
 
 namespace Algoriza_Project_2023BE83
 {
@@ -31,7 +32,8 @@ namespace Algoriza_Project_2023BE83
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
             services.AddTransient<IAuthService,AuthService>();
-            services.AddTransient<IDoctorService,IDoctorService>();
+            services.AddScoped(typeof(IDoctorsRepository<>), typeof(DoctorsRepository<>));
+            services.AddTransient<IDoctorService,DoctorService>();
             services.AddMvc();
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

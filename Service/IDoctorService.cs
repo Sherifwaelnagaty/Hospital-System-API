@@ -1,4 +1,4 @@
-﻿using Core.Domain;
+﻿using Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,9 @@ namespace Service
 {
     public interface IDoctorService
     {
-        Task<List<Doctors>> GetAllDoctors();
-        Task<Doctors> GetDoctorById(string id);
-        Task<Doctors> AddDoctor(Doctors doctorModel);
+        IEnumerable<Doctors> GetAllDoctors();
+        Doctors GetDoctorById(string id);
+        Doctors AddDoctor(Doctors doctorModel);
         Task<bool> UpdateDoctorById(string id, Doctors doctorModel);
         Task<bool> DeleteDoctorById(string id);
     }

@@ -1,23 +1,17 @@
-﻿using Core.Domain;
-using Core.Repository;
+﻿using Core.Models;
 using Core.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service
 {
-    public class DoctorService:IDoctorService
+    public class DoctorService : IDoctorService
     {
         private readonly IDoctorsRepository<Doctors> _doctorsRepository;
-        public DoctorService(IDoctorsRepository<Doctors> doctorsRepository) 
+        public DoctorService(IDoctorsRepository<Doctors> doctorsRepository)
         {
             _doctorsRepository = doctorsRepository;
         }
 
-        public Task<Doctors> AddDoctor(Doctors doctorModel)
+        public Doctors AddDoctor(Doctors doctorModel)
         {
             return _doctorsRepository.AddDoctor(doctorModel);
         }
@@ -27,12 +21,12 @@ namespace Service
             return _doctorsRepository.DeleteDoctorById(id);
         }
 
-        public Task<List<Doctors>> GetAllDoctors()
+        public IEnumerable<Doctors> GetAllDoctors()
         {
             return _doctorsRepository.GetAllDoctors();
         }
 
-        public Task<Doctors> GetDoctorById(string id)
+        public Doctors GetDoctorById(string id)
         {
             return _doctorsRepository.GetDoctorById(id);
         }
