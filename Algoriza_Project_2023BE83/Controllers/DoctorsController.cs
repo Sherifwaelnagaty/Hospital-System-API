@@ -1,5 +1,6 @@
 using Core.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using System.Drawing.Printing;
@@ -10,9 +11,11 @@ namespace Algoriza_Project_2023BE83.Controllers;
 public class DoctorsController : ControllerBase
 {
     private readonly IDoctorService _doctorsService;
-    public DoctorsController(IDoctorService doctorsService)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    public DoctorsController(IDoctorService doctorsService, IWebHostEnvironment webHostEnvironment)
     {
         _doctorsService = doctorsService;
+        _webHostEnvironment = webHostEnvironment;
     }
     [HttpGet("")]
     public async Task<IActionResult> GetAllDoctors(int pageNumber, int pageSize)
@@ -33,12 +36,33 @@ public class DoctorsController : ControllerBase
     [HttpPost("")]
     public async Task<IActionResult> AddDoctor([FromBody] Doctors doctorModel)
     {
-        var id = _doctorsService.AddDoctor(doctorModel);
-        if (id == null) 
+        if (ModelState.IsValid)
         {
-            return BadRequest("An Error has occured");
+            if (doctorModel.Image != null)
+            {
+                string folder = "Images/Doctors";
+                folder += doctorModel.Image.FileName;
+                string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);   
+            }
+            var id = _doctorsService.AddDoctor(doctorModel);
+            if (id == null)
+            {
+                return BadRequest("An Error has occured");
+            }
+            return CreatedAtAction(nameof(GetDoctorById), new { id = id, controllers = "doctors" }, id);
         }
-        return CreatedAtAction(nameof(GetDoctorById), new { id = id, controllers = "doctors" },id);
+        return BadRequest("Error Happened");
+    }
+    private async Task<string> UploadImage(string folderPath, IFormFile file)
+    {
+
+        folderPath += Guid.NewGuid().ToString() + "_" + file.FileName;
+
+        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
+
+        await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+
+        return "/" + folderPath;
     }
 
     [HttpPut("{id}")]

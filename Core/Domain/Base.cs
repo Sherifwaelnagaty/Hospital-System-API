@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -14,7 +15,7 @@ namespace Core.Models
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string gender { get; set; }
-        public string Image { get; set; }
+        public IFormFile Image { get; set; }
         public DateOnly Dateofbirth { get; set; }
     }
 }
