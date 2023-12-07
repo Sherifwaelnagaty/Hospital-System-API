@@ -19,7 +19,8 @@ namespace Repository.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            new DoctorsMap(modelBuilder.Entity<Doctors>());
+            //new DoctorsMap(modelBuilder.Entity<Doctors>());
+            new CouponsMap(modelBuilder.Entity<Coupons>());
         }
     }
 }

@@ -38,7 +38,6 @@ public class CouponsRepository<T> : ICouponsRepository<T> where T : Coupons
             coupon.DiscountType = couponModel.DiscountType;
             coupon.MaxUses = couponModel.MaxUses;
             coupon.Uses = couponModel.Uses;
-            coupon.ExpirationDate = couponModel.ExpirationDate;
             coupon.IsEnabled = couponModel.IsEnabled;
             coupon.Value = couponModel.Value;
             await _context.SaveChangesAsync();
@@ -46,7 +45,7 @@ public class CouponsRepository<T> : ICouponsRepository<T> where T : Coupons
         }
         else
         {
-            throw new Exception("There's something wrong in your Input try again");
+            throw new Exception("Coupon not found");
         }
     }
     public async Task<bool> DeleteCoupon(string id)

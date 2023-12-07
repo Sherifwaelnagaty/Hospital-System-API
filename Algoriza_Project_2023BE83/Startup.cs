@@ -11,6 +11,8 @@ using Repository;
 using Repository.Helpers;
 using Core.Models;
 using Repository.Data;
+using Core.Repository;
+using Repository.Repositories;
 
 namespace Algoriza_Project_2023BE83
 {
@@ -34,6 +36,8 @@ namespace Algoriza_Project_2023BE83
             services.AddTransient<IAuthService,AuthService>();
             services.AddScoped(typeof(IDoctorsRepository<>), typeof(DoctorsRepository<>));
             services.AddTransient<IDoctorService,DoctorService>();
+            services.AddScoped(typeof(ICouponsRepository<>), typeof(CouponsRepository<>));
+            services.AddTransient<ICouponsService,CouponsService>();
             services.AddMvc();
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

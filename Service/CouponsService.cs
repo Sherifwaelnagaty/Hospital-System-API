@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Core.Repository;
 using Repository;
 using Repository.Repositories;
 using System;
@@ -11,8 +12,8 @@ namespace Service
 {
     public class CouponsService : ICouponsService
     {
-        private readonly CouponsRepository<Coupons> _couponsRepository;
-        public CouponsService(CouponsRepository<Coupons> couponsRepository) 
+        private readonly ICouponsRepository<Coupons> _couponsRepository;
+        public CouponsService(ICouponsRepository<Coupons> couponsRepository) 
         {
             _couponsRepository = couponsRepository;
         }
