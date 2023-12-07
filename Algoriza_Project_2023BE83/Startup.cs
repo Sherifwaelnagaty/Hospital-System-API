@@ -12,7 +12,6 @@ using Repository.Helpers;
 using Core.Models;
 using Repository.Data;
 using Core.Repository;
-using Repository.Repositories;
 
 namespace Algoriza_Project_2023BE83
 {
@@ -41,7 +40,6 @@ namespace Algoriza_Project_2023BE83
             services.AddMvc();
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme =JwtBearerDefaults.AuthenticationScheme;

@@ -3,12 +3,11 @@ using Core.Service;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using Repository;
 using Core.Models;
 using Repository.Data;
 using System;
 using System.Drawing.Printing;
-namespace Service;
+namespace Repository;
 public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
 {
     private readonly ApplicationContext _context;
@@ -42,7 +41,7 @@ public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
     {
         return entities.SingleOrDefault(s => s.Id == id);
     }
-    public  T AddDoctor(T doctorModel)
+    public T AddDoctor(T doctorModel)
     {
         if (doctorModel == null)
         {
@@ -51,18 +50,18 @@ public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
         entities.Add(doctorModel);
         _context.SaveChanges();
         return doctorModel;
-        
+
     }
     public async Task<bool> UpdateDoctorById(string id, T doctorModel)
     {
         var doctor = entities.FindAsync(id);
         if (doctor != null)
         {
-            entities.Update(doctorModel as T );
+            entities.Update(doctorModel as T);
             await _context.SaveChangesAsync();
             return true;
         }
-        return false; 
+        return false;
     }
     public async Task<bool> DeleteDoctorById(string id)
     {

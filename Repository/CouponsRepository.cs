@@ -5,7 +5,7 @@ using Repository.Data;
 using System;
 using System.Threading.Tasks;
 
-namespace Repository.Repositories;
+namespace Repository;
 public class CouponsRepository<T> : ICouponsRepository<T> where T : Coupons
 {
     private readonly ApplicationContext _context;
@@ -17,17 +17,17 @@ public class CouponsRepository<T> : ICouponsRepository<T> where T : Coupons
     }
     public T AddCoupon(T couponModel)
     {
-        if(couponModel!=null) 
+        if (couponModel != null)
         {
-          entities.Add(couponModel);
-          _context.SaveChangesAsync();
+            entities.Add(couponModel);
+            _context.SaveChangesAsync();
             return couponModel;
         }
         else
         {
             throw new Exception("There's something wrong in your Input try again");
         }
-         
+
     }
     public async Task<T> UpdateCoupon(string id, T couponModel)
     {
@@ -61,7 +61,7 @@ public class CouponsRepository<T> : ICouponsRepository<T> where T : Coupons
         {
             return false;
         }
-        
+
     }
 
     public async Task<bool> DeactivateCoupon(string id)
@@ -73,9 +73,9 @@ public class CouponsRepository<T> : ICouponsRepository<T> where T : Coupons
             await _context.SaveChangesAsync();
             return true;
         }
-        else 
+        else
         {
-            return false; 
+            return false;
         }
     }
 }
