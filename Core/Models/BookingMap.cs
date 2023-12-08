@@ -18,6 +18,8 @@ namespace Core.Models
             entityBuilder.Property(t => t.Date).IsRequired();
             entityBuilder.Property(t => t.Patient).IsRequired();
             entityBuilder.Property(t => t.PatientId).IsRequired();
+            entityBuilder.Property(t=> t.DoctorId).IsRequired();
+
             
         }
     }

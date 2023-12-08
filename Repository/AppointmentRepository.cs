@@ -30,7 +30,6 @@ namespace Repository
             _context.SaveChanges();
             return Model;
         }
-
         public async Task<bool> DeleteAppointmentById(string id)
         {
             var Appointment = await entities.FindAsync(id);
