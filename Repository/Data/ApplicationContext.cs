@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Domain;
 using Core.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace Repository.Data
             new DoctorsMap(modelBuilder.Entity<Doctors>());
             new CouponsMap(modelBuilder.Entity<Coupons>());
             new AppointmentMap(modelBuilder.Entity<Appointment>());
+            new BookingMap(modelBuilder.Entity<Booking>()); 
         }
     }
 }

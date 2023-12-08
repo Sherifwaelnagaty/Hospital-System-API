@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class CouponsService : ICouponsService
+    public class CouponsService : ICouponService
     {
         private readonly ICouponsRepository<Coupons> _couponsRepository;
         public CouponsService(ICouponsRepository<Coupons> couponsRepository) 

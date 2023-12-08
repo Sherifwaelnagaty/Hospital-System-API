@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core_Layer.Enums
+namespace Core.Enums
 {
 
-   public enum WeekDays
-    {
+   public enum Days
+   {
         Saturday,
         Sunday, 
         Monday,
@@ -16,26 +16,26 @@ namespace Core_Layer.Enums
         Wednesday,
         Thursday,
         Friday,
-    }
-  public  enum Gender { Male, Female,}
-     public enum DiscountType
-    {
+   }
+   public enum Gender { Male, Female,}
+   public enum DiscountType
+   {
         percentage,
         value,
-    }
+   }
 
-    public enum RequestStatus
-    {
+   public enum RequestStatus
+   {
         Pending,
         Completed,
         Cancelled
-    }
-    public enum UserRole { 
-   
-    Doctor,
-    Patient ,
+   }
+   public enum UserRole 
+   { 
+        Doctor,
+        Patient,
         Admin
-    }
+   }
 
 
 }

@@ -8,6 +8,7 @@ namespace Core.Models
 {
     public class Patients : Base
     {
-        List<string> reservations {  get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
+
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public interface ICouponsService
+    public interface ICouponService
     {
         Coupons AddCoupon(Coupons couponModel);
         Task<Coupons> UpdateCoupon(string id, Coupons couponModel);

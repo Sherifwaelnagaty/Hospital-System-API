@@ -9,8 +9,8 @@ namespace Algoriza_Project_2023BE83.Controllers;
 [ApiController]
 public class CouponsController : ControllerBase
 {
-    private readonly ICouponsService _couponsRepository;
-    public CouponsController(ICouponsService couponsRepository)
+    private readonly ICouponService _couponsRepository;
+    public CouponsController(ICouponService couponsRepository)
     {
         _couponsRepository = couponsRepository;
     }
