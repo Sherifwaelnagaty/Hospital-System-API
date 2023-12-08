@@ -11,5 +11,6 @@ namespace Core.Repository
     {
         IEnumerable<T> GetAllPatients(int pageNumber, int pageSize);
         T GetPatientById(string id);
+        Task<int> GetNumbersofPatients();
     }
 }

@@ -9,7 +9,7 @@ namespace Core.Service
 {
     public interface IBookingService
     {
-        IEnumerable<Booking> BookAppointment(Booking model);
+        Booking BookAppointment(Booking model);
         IEnumerable<Booking> GetBookingForDoctor(string doctorId);
         IEnumerable<Booking> GetBookingForPatient(string patientId);
         Task<bool> CancelBookingbyId(string id);

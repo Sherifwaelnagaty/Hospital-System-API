@@ -15,6 +15,6 @@ namespace Service
         Task<bool> UpdateDoctorById(string id, Doctors doctorModel);
         Task<bool> DeleteDoctorById(string id);
         Task<int> GetNumberOfDoctors();
-        IEnumerable<Doctors> GetTopDoctors(int count);
+        IEnumerable<Doctors> GetTopDoctors();
     }
 }

@@ -44,5 +44,9 @@ namespace Repository
         {
             return entities.SingleOrDefault(s => s.Id == id);
         }
+        public Task<int> GetNumbersofPatients() 
+        {
+            return entities.CountAsync();
+        }
     }
 }

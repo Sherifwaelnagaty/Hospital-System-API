@@ -79,8 +79,8 @@ public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
     {
         return await entities.CountAsync();
     }
-    public IEnumerable<T> GetTopDoctors(int count)
+    public IEnumerable<T> GetTopDoctors()
     {
-        return entities.OrderByDescending(d => d.Ratings).Take(count).AsEnumerable();
+        return entities.OrderByDescending(d => d.Ratings).Take(10).AsEnumerable();
     }
 }

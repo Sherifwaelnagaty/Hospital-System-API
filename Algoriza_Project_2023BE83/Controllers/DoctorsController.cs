@@ -81,4 +81,24 @@ public class DoctorsController : ControllerBase
         }
         return BadRequest("An Error has occured");
     }
+    [HttpGet("Dashboard/{id}")]
+    public IActionResult GetNumbersofDoctors()
+    {
+        var Numbers = _doctorsService.GetNumberOfDoctors();
+        if (Numbers == null)
+        {
+            return BadRequest("An Error Has Occured ,Try Again");
+        }
+        return Ok(Numbers);
+    }
+    [HttpGet("Dashboard/")]
+    public IActionResult GetTopDoctors()
+    {
+        var Numbers = _doctorsService.GetTopDoctors();
+        if (Numbers == null)
+        {
+            return BadRequest("An Error Has Occured ,Try Again");
+        }
+        return Ok(Numbers);
+    }
 }

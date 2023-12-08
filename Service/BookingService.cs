@@ -17,7 +17,7 @@ namespace Service
             _bookingRepository = bookingRepository;
         }
 
-        public IEnumerable<Booking> BookAppointment(Booking model)
+        public Booking BookAppointment(Booking model)
         {
             return _bookingRepository.BookAppointment(model);
         }

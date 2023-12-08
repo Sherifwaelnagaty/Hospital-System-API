@@ -10,38 +10,33 @@ namespace Service
         {
             _doctorsRepository = doctorsRepository;
         }
-
         public Doctors AddDoctor(Doctors doctorModel)
         {
             return _doctorsRepository.AddDoctor(doctorModel);
         }
-
         public Task<bool> DeleteDoctorById(string id)
         {
             return _doctorsRepository.DeleteDoctorById(id);
         }
-
         public IEnumerable<Doctors> GetAllDoctors(int pageNumber, int pageSize)
         {
             return  _doctorsRepository.GetAllDoctors(pageNumber, pageSize);
         }
-
         public Doctors GetDoctorById(string id)
         {
             return _doctorsRepository.GetDoctorById(id);
         }
-
         public Task<bool> UpdateDoctorById(string id, Doctors doctorModel)
         {
             return _doctorsRepository.UpdateDoctorById(id, doctorModel);
         }
-        public async Task<int> GetNumberOfDoctors()
+        public Task<int> GetNumberOfDoctors()
         {
-            return await _doctorsRepository.GetNumberOfDoctors();
+            return _doctorsRepository.GetNumberOfDoctors();
         }
-        public IEnumerable<Doctors> GetTopDoctors(int count)
+        public IEnumerable<Doctors> GetTopDoctors()
         {
-            return _doctorsRepository.GetTopDoctors(count);
+            return _doctorsRepository.GetTopDoctors();
         }
     }
 }

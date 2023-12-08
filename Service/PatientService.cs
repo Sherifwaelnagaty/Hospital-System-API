@@ -28,5 +28,9 @@ namespace Service
             return _patientsRepository.GetPatientById(id);
 
         }
+        public Task<int> GetNumbersofPatients()
+        {
+            return _patientsRepository.GetNumbersofPatients();
+        }
     }
 }

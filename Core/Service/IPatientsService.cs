@@ -11,5 +11,6 @@ namespace Service
     {
         IEnumerable<Patients> GetAllPatients(int pageNumber, int pageSize);
         Patients GetPatientById(string id);
+        Task<int> GetNumbersofPatients();
     }
 }

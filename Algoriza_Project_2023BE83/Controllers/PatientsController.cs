@@ -15,7 +15,7 @@ namespace Algoriza_Project_2023BE83.Controllers
             _PatientsService = PatientsService;
         }
         [HttpGet("")]
-        public async Task<IActionResult> GetAllPatients(int pageNumber, int pageSize)
+        public IActionResult GetAllPatients(int pageNumber, int pageSize)
         {
             var Patients = _PatientsService.GetAllPatients(pageNumber, pageSize);
             return Ok(Patients);
@@ -29,6 +29,16 @@ namespace Algoriza_Project_2023BE83.Controllers
                 return NotFound();
             }
             return Ok(Patient);
+        }
+        [HttpGet("Numbers/{id}")]
+        public IActionResult GetNumberofPatients()
+        {
+            var Numbers = _PatientsService.GetNumbersofPatients();
+            if(Numbers == null)
+            {
+                return BadRequest("An Error Has Occured ,Try Again");
+            }
+            return Ok(Numbers);
         }
     }
 }

@@ -10,5 +10,5 @@ public interface IDoctorsRepository<T> where T : Doctors
     Task<bool> UpdateDoctorById(string id, T doctorModel);
     Task<bool> DeleteDoctorById(string id);
     Task<int> GetNumberOfDoctors();
-    IEnumerable<T> GetTopDoctors(int count);
+    IEnumerable<T> GetTopDoctors();
 }
