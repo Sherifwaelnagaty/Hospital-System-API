@@ -41,6 +41,8 @@ namespace Algoriza_Project_2023BE83
             services.AddTransient<IAppointmentService, AppointmentService>();
             services.AddScoped(typeof(IPatientsRepository<>), typeof(PatientsRepository<>));
             services.AddTransient<IPatientsService, PatientService>();
+            services.AddScoped(typeof(IBookingRepository<>), typeof(BookingRepository<>));
+            services.AddTransient<IBookingService, BookingService>();
             services.AddMvc();
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

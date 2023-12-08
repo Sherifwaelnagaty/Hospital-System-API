@@ -23,19 +23,11 @@ namespace Core.Enums
         percentage,
         value,
    }
-
-   public enum RequestStatus
-   {
-        Pending,
-        Completed,
-        Cancelled
-   }
    public enum UserRole 
    { 
         Doctor,
         Patient,
         Admin
    }
-
 
 }

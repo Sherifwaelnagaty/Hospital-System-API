@@ -5,5 +5,6 @@ public class Doctors : Base
 {
     public string Specialize { get; set; }
     public ICollection<Appointment> Appointments { get; set; }
+    public double Ratings { get; set; }
 
 }

@@ -7,6 +7,7 @@ using Core.Models;
 using Repository.Data;
 using System;
 using System.Drawing.Printing;
+using System.Numerics;
 namespace Repository;
 public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
 {
@@ -54,7 +55,7 @@ public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
     }
     public async Task<bool> UpdateDoctorById(string id, T doctorModel)
     {
-        var doctor = entities.FindAsync(id);
+        var doctor = await entities.FindAsync(id);
         if (doctor != null)
         {
             entities.Update(doctorModel as T);
@@ -73,5 +74,13 @@ public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
             return true;
         }
         return false;
+    }
+    public async Task<int> GetNumberOfDoctors()
+    {
+        return await entities.CountAsync();
+    }
+    public IEnumerable<T> GetTopDoctors(int count)
+    {
+        return entities.OrderByDescending(d => d.Ratings).Take(count).AsEnumerable();
     }
 }

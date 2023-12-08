@@ -11,4 +11,5 @@ public class Coupons
     public DateTime ExpirationDate { get; set; }
     public bool IsEnabled { get; set; }
     public string Value { get; set; }
+
 }

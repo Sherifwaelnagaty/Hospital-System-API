@@ -35,5 +35,13 @@ namespace Service
         {
             return _doctorsRepository.UpdateDoctorById(id, doctorModel);
         }
+        public async Task<int> GetNumberOfDoctors()
+        {
+            return await _doctorsRepository.GetNumberOfDoctors();
+        }
+        public IEnumerable<Doctors> GetTopDoctors(int count)
+        {
+            return _doctorsRepository.GetTopDoctors(count);
+        }
     }
 }

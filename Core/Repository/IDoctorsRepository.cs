@@ -9,4 +9,6 @@ public interface IDoctorsRepository<T> where T : Doctors
     T AddDoctor(T doctorModel);
     Task<bool> UpdateDoctorById(string id, T doctorModel);
     Task<bool> DeleteDoctorById(string id);
+    Task<int> GetNumberOfDoctors();
+    IEnumerable<T> GetTopDoctors(int count);
 }
