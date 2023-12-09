@@ -4,7 +4,7 @@ using Service;
 using Core.Models;
 using Microsoft.AspNetCore.Authorization;
 namespace Algoriza_Project_2023BE83.Controllers;
-[Authorize(Roles ="Admin")]
+//[Authorize(Roles ="Admin")]
 [Route("api/[controller]")]
 [ApiController]
 public class CouponsController : ControllerBase
@@ -21,19 +21,19 @@ public class CouponsController : ControllerBase
         return Ok(couponId);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCoupon(string id, [FromBody] Coupons couponModel)
+    public async Task<IActionResult> UpdateCoupon([FromRoute]string id, [FromBody] Coupons couponModel)
     {
         await _couponsRepository.UpdateCoupon(id, couponModel);
         return Ok();
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCoupon(string id)
+    public async Task<IActionResult> DeleteCoupon([FromRoute]string id)
     {
         await _couponsRepository.DeleteCoupon(id);
         return Ok("Coupon Deleted Successfully");
     }
     [HttpPut("deactivate/{id}")]
-    public async Task<IActionResult> DeactivateCoupon(string id)
+    public async Task<IActionResult> DeactivateCoupon([FromRoute]string id)
     {
         await _couponsRepository.DeactivateCoupon(id);
         return Ok();

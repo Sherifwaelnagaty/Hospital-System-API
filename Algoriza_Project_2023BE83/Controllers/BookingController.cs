@@ -7,7 +7,6 @@ using Service;
 
 namespace Algoriza_Project_2023BE83.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BookingController:ControllerBase
@@ -18,25 +17,29 @@ namespace Algoriza_Project_2023BE83.Controllers
         {
             _bookingService = bookingService;
         }
+        [Authorize(Roles = "Patient")]
         [HttpGet("{id}")]
-        public IActionResult BookAppointment(Booking model)
+        public IActionResult BookAppointment([FromBody]Booking model)
         {
             var booked = _bookingService.BookAppointment(model);
             return Ok(booked);
         }
+        [Authorize(Roles = "Doctor")]
         [HttpGet("doctor/{id}")]
         public IActionResult GetBookingForDoctor(string doctorId)
         {
              var booked = _bookingService.GetBookingForDoctor(doctorId);
              return Ok(booked);
         }
+        [Authorize(Roles = "Patient")]
         [HttpGet("patient/{id}")]
         public IActionResult GetBookingForPatient(string patientId)
         {
             var booked = _bookingService.GetBookingForPatient(patientId);
             return Ok(booked);
         }
-        [HttpGet("cancel/{id}")]
+        [Authorize(Roles = "Patient")]
+        [HttpDelete("cancel/{id}")]
         public IActionResult CancelBookingbyId(string id)
         {
             var canceling = _bookingService.CancelBookingbyId(id);

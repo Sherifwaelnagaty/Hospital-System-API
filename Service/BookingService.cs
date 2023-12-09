@@ -20,23 +20,19 @@ namespace Service
             _bookingRepository = bookingRepository;
            _appointmentRepository = appointmentRepository;
         }
-
         public Booking BookAppointment(Booking model)
         {
             _appointmentRepository.DeleteAppointmentById(model.AppointmentId);
             return _bookingRepository.BookAppointment(model);
         }
-
         public Task<bool> CancelBookingbyId(string id)
         {
             return _bookingRepository.CancelBookingbyId(id);    
         }
-
         public IEnumerable<Booking> GetBookingForDoctor(string doctorId)
         {
             return _bookingRepository.GetBookingForDoctor(doctorId);
         }
-
         public IEnumerable<Booking> GetBookingForPatient(string patientId)
         {
             return _bookingRepository.GetBookingForPatient(patientId);

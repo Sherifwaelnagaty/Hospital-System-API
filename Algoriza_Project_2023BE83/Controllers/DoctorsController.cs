@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service;
 using System.Drawing.Printing;
 namespace Algoriza_Project_2023BE83.Controllers;
-[Authorize (Roles ="Admin")]
+
 [Route("api/[controller]")]
 [ApiController]
 public class DoctorsController : ControllerBase
@@ -17,14 +17,16 @@ public class DoctorsController : ControllerBase
         _doctorsService = doctorsService;
         _webHostEnvironment = webHostEnvironment;
     }
+    //[Authorize (Roles ="Patient")]
     [HttpGet("")]
-    public IActionResult GetAllDoctors(int pageNumber, int pageSize)
+    public IActionResult GetAllDoctors([FromRoute]int pageNumber,[FromRoute] int pageSize)
     {
         var doctors = _doctorsService.GetAllDoctors(pageNumber, pageSize);
         return Ok(doctors);
     }
+    //[Authorize (Roles ="Patient")]
     [HttpGet("{id}")]
-    public  IActionResult GetDoctorById([FromRoute]string id)
+    public  IActionResult GetDoctorById([FromRoute] string id)
     {
         var doctor =  _doctorsService.GetDoctorById(id);
         if (doctor == null)
@@ -33,6 +35,8 @@ public class DoctorsController : ControllerBase
         }
         return Ok(doctor);
     }
+
+    //[Authorize (Roles ="Admin")]
     [HttpPost("")]
     public IActionResult AddDoctor([FromBody] Doctors doctorModel)
     {
@@ -53,13 +57,14 @@ public class DoctorsController : ControllerBase
         }
         return BadRequest("Error Happened");
     }
-
+    //[Authorize (Roles ="Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDoctorById([FromRoute] string id, [FromBody] Doctors doctorModel)
     {
         var doctor = await _doctorsService.UpdateDoctorById(id, doctorModel);
         return Ok(doctor);
     }
+    //[Authorize (Roles ="Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorById([FromRoute] string id)
     {
@@ -70,7 +75,7 @@ public class DoctorsController : ControllerBase
         }
         return BadRequest("An Error has occured");
     }
-    [HttpGet("Dashboard/{id}")]
+    [HttpGet("Dashboard/numbers")]
     public IActionResult GetNumbersofDoctors()
     {
         var Numbers = _doctorsService.GetNumberOfDoctors();
@@ -80,7 +85,7 @@ public class DoctorsController : ControllerBase
         }
         return Ok(Numbers);
     }
-    [HttpGet("Dashboard/")]
+    [HttpGet("Dashboard/top")]
     public IActionResult GetTopDoctors()
     {
         var Numbers = _doctorsService.GetTopDoctors();
