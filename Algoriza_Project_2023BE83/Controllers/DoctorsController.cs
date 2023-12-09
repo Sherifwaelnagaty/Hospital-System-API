@@ -18,13 +18,13 @@ public class DoctorsController : ControllerBase
         _webHostEnvironment = webHostEnvironment;
     }
     [HttpGet("")]
-    public async Task<IActionResult> GetAllDoctors(int pageNumber, int pageSize)
+    public IActionResult GetAllDoctors(int pageNumber, int pageSize)
     {
         var doctors = _doctorsService.GetAllDoctors(pageNumber, pageSize);
         return Ok(doctors);
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetDoctorById([FromRoute]string id)
+    public  IActionResult GetDoctorById([FromRoute]string id)
     {
         var doctor =  _doctorsService.GetDoctorById(id);
         if (doctor == null)
@@ -34,7 +34,7 @@ public class DoctorsController : ControllerBase
         return Ok(doctor);
     }
     [HttpPost("")]
-    public async Task<IActionResult> AddDoctor([FromBody] Doctors doctorModel)
+    public IActionResult AddDoctor([FromBody] Doctors doctorModel)
     {
         if (ModelState.IsValid)
         {
@@ -52,17 +52,6 @@ public class DoctorsController : ControllerBase
             return CreatedAtAction(nameof(GetDoctorById), new { id = id, controllers = "doctors" }, id);
         }
         return BadRequest("Error Happened");
-    }
-    private async Task<string> UploadImage(string folderPath, IFormFile file)
-    {
-
-        folderPath += Guid.NewGuid().ToString() + "_" + file.FileName;
-
-        string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
-
-        await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
-
-        return "/" + folderPath;
     }
 
     [HttpPut("{id}")]

@@ -21,7 +21,7 @@ namespace Algoriza_Project_2023BE83.Controllers
             return Ok(Patients);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPatientById([FromRoute] string id)
+        public IActionResult GetPatientById([FromRoute] string id)
         {
             var Patient = _PatientsService.GetPatientById(id);
             if (Patient == null)
@@ -30,7 +30,7 @@ namespace Algoriza_Project_2023BE83.Controllers
             }
             return Ok(Patient);
         }
-        [HttpGet("Numbers/{id}")]
+        [HttpGet("Numbers")]
         public IActionResult GetNumberofPatients()
         {
             var Numbers = _PatientsService.GetNumbersofPatients();

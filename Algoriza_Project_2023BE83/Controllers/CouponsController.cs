@@ -15,7 +15,7 @@ public class CouponsController : ControllerBase
         _couponsRepository = couponsRepository;
     }
     [HttpPost("")]
-    public async Task<IActionResult> AddCoupon([FromBody] Coupons couponModel)
+    public IActionResult AddCoupon([FromBody] Coupons couponModel)
     {
         var couponId = _couponsRepository.AddCoupon(couponModel);
         return Ok(couponId);
