@@ -13,6 +13,6 @@ public class Appointment
     public decimal Price { get; set; }
     public string DoctorId { get; set; }
     public string PatientId { get; set; }
-    public Doctors Doctor { get; set; }
-    public Patients Patient { get; set; } 
+    public virtual Doctors Doctor { get; set; }
+    public virtual Patients Patient { get; set; } 
 }

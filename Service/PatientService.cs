@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Core.Repository;
 using Core.Service;
 using Repository;
 using System;
@@ -12,9 +13,9 @@ namespace Service
 {
     public class PatientService : IPatientsService
     {
-        private readonly PatientsRepository <Patients> _patientsRepository;
+        private readonly IPatientsRepository <Patients> _patientsRepository;
 
-        public PatientService(PatientsRepository<Patients> patientsRepository) 
+        public PatientService(IPatientsRepository<Patients> patientsRepository) 
         {
             patientsRepository = _patientsRepository;
         }

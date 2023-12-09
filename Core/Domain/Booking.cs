@@ -13,10 +13,9 @@ namespace Core.Domain
         public string Id { get; set; }
         public DateTime Date { get; set; } 
         public decimal Price { get; set; }
-        public virtual Appointment Appointment { get; set; }
         public string PatientId { get; set; }
-        public Patients Patient { get; set; }
         public string DoctorId { get; set; }
+        public string AppointmentId{ get; set;}
 
 
     }

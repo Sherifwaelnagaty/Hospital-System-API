@@ -12,8 +12,8 @@ namespace Service
 {
     public class AppointmentService : IAppointmentService
     {
-        private readonly AppointmentRepository<Appointment> _appointmentrepository;
-        public AppointmentService(AppointmentRepository<Appointment> appointmentrepository) 
+        private readonly IAppointmentRepository<Appointment> _appointmentrepository;
+        public AppointmentService(IAppointmentRepository<Appointment> appointmentrepository) 
         {
             _appointmentrepository = appointmentrepository;
         }

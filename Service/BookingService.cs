@@ -1,4 +1,6 @@
 ﻿using Core.Domain;
+using Core.Models;
+using Core.Repository;
 using Core.Service;
 using Repository;
 using System;
@@ -11,14 +13,17 @@ namespace Service
 {
     public class BookingService : IBookingService
     {
-        private readonly BookingRepository<Booking> _bookingRepository;
-        public BookingService(BookingRepository<Booking> bookingRepository) 
+        private readonly IBookingRepository<Booking> _bookingRepository;
+        private readonly IAppointmentRepository<Appointment> _appointmentRepository;
+        public BookingService(IBookingRepository<Booking> bookingRepository, IAppointmentRepository<Appointment> appointmentRepository) 
         {
             _bookingRepository = bookingRepository;
+           _appointmentRepository = appointmentRepository;
         }
 
         public Booking BookAppointment(Booking model)
         {
+            _appointmentRepository.DeleteAppointmentById(model.AppointmentId);
             return _bookingRepository.BookAppointment(model);
         }
 

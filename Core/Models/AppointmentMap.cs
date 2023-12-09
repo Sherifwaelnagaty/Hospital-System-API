@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,9 @@ namespace Core.Models
             entityBuilder.Property(t => t.Date).IsRequired();
             entityBuilder.Property(t => t.Time).IsRequired();
             entityBuilder.Property(t => t.Price).IsRequired();
-            entityBuilder.Property(t => t.Patient).IsRequired();
             entityBuilder.Property(t=>t.DoctorId).IsRequired();
             entityBuilder.Property(t=> t.PatientId).IsRequired();
-            entityBuilder.Property(t => t.Doctor).IsRequired();
-
+         
         }
     }
 }

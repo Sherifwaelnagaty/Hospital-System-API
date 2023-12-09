@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +22,8 @@ namespace Core.Models
             entityBuilder.Property(t => t.Phone).IsRequired();
             entityBuilder.Property(t => t.Specialize).IsRequired();
             entityBuilder.Property(t => t.Dateofbirth).IsRequired();
-            entityBuilder.Property(t => t.Image).IsRequired();
+            
+            
         }
     }
 }
