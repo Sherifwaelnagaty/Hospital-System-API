@@ -17,12 +17,13 @@ namespace Service.Service
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<Users> _userManager;
+        private readonly UserManager<Patients> _patientsManager;
+        private readonly UserManager<Doctors> _doctorsManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JWT _jwt;
-        public AuthService(UserManager<Users> userManager, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager)
+        public AuthService(UserManager<Patients> patientsManager, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager)
         {
-            _userManager = userManager;
+            _patientsManager = patientsManager;
             _jwt = jwt.Value;
             _roleManager = roleManager;
         }
@@ -49,14 +50,14 @@ namespace Service.Service
         public async Task<Auth> LoginAsync(Login model)
         {
             var auth = new Auth();
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+            var user = await _patientsManager.FindByEmailAsync(model.Email);
+            if (user == null || !await _patientsManager.CheckPasswordAsync(user, model.Password))
             {
                 auth.Message = "Email or Password is incorrect";
                 return auth;
             }
             var jwtSecurityToken = await CreateJwtToken(user);
-            var rolesList = await _userManager.GetRolesAsync(user);
+            var rolesList = await _patientsManager.GetRolesAsync(user);
             auth.IsAuthenticated = true;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             auth.Email = user.Email;
@@ -68,22 +69,22 @@ namespace Service.Service
 
         public async Task<Auth> RegisterAsync(Register model)
         {
-            if (await _userManager.FindByEmailAsync(model.Email) is not null)
+            if (await _patientsManager.FindByEmailAsync(model.Email) is not null)
             {
                 return new Auth { Message = "Email is already registered!" };
             }
-            if (await _userManager.FindByNameAsync(model.Username) is not null)
+            if (await _patientsManager.FindByNameAsync(model.Username) is not null)
             {
                 return new Auth { Message = "Username is already registered!" };
             }
-            var user = new Users
+            var user = new Patients
             {
                 UserName = model.Username,
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
             };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var result = await _patientsManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
                 var errors = string.Empty;
@@ -93,7 +94,7 @@ namespace Service.Service
                 }
                 return new Auth { Message = errors };
             }
-            await _userManager.AddToRoleAsync(user, "User");
+            await _patientsManager.AddToRoleAsync(user, "User");
 
             var jwtSecurityToken = await CreateJwtToken(user);
             return new Auth
@@ -106,10 +107,10 @@ namespace Service.Service
                 UserName = user.UserName,
             };
         }
-        private async Task<JwtSecurityToken> CreateJwtToken(Users user)
+        private async Task<JwtSecurityToken> CreateJwtToken(Patients patients)
         {
-            var userClaims = await _userManager.GetClaimsAsync(user);
-            var roles = await _userManager.GetRolesAsync(user);
+            var userClaims = await _patientsManager.GetClaimsAsync(patients);
+            var roles = await _patientsManager.GetRolesAsync(patients);
             var roleClaims = new List<Claim>();
 
             foreach (var role in roles)
@@ -117,10 +118,10 @@ namespace Service.Service
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Sub, patients.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id)
+                new Claim(JwtRegisteredClaimNames.Email, patients.Email),
+                new Claim("uid", patients.Id)
             }
             .Union(userClaims)
             .Union(roleClaims);
