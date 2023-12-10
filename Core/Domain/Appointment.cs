@@ -1,11 +1,13 @@
 using Core.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 
 namespace Core.Models;
 public class Appointment
 {
+    [Key]
     public string Id { get; set; }
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }

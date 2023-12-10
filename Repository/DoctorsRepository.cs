@@ -58,7 +58,14 @@ public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
         var doctor = await entities.FindAsync(id);
         if (doctor != null)
         {
-            entities.Update(doctorModel as T);
+            doctor.gender = doctorModel.gender;
+            doctor.Email = doctorModel.Email;
+            doctor.FirstName = doctorModel.FirstName;
+            doctor.Image = doctorModel.Image;
+            doctor.LastName = doctorModel.LastName;
+            doctor.PhoneNumber = doctorModel.PhoneNumber;
+            doctor.Specialize = doctorModel.Specialize;
+            doctor.UserName = doctor.UserName;
             await _context.SaveChangesAsync();
             return true;
         }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,6 +48,9 @@ namespace Repository.Data
             .WithMany(d => d.Appointments)
             .HasForeignKey(a => a.DoctorId)
             .IsRequired();
+            modelBuilder.Entity<Coupons>()
+            .HasKey(c => c.Id)
+            .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             base.OnModelCreating(modelBuilder);
         }
     }
