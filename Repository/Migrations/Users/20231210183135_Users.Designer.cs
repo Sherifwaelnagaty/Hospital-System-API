@@ -12,7 +12,7 @@ using Repository.Data;
 namespace Repository.Migrations.Users
 {
     [DbContext(typeof(UsersContext))]
-    [Migration("20231210140923_Users")]
+    [Migration("20231210183135_Users")]
     partial class Users
     {
         /// <inheritdoc />
@@ -93,8 +93,8 @@ namespace Repository.Migrations.Users
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("gender")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -9,6 +9,7 @@ namespace Core.Repository
 {
     public interface IPatientsRepository<T> where T : Patients
     {
+        T AddPatient(T patientmodel);
         IEnumerable<T> GetAllPatients(int pageNumber, int pageSize);
         T GetPatientById(string id);
         Task<int> GetNumbersofPatients();

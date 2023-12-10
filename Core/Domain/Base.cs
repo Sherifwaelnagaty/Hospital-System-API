@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Enums;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
@@ -15,7 +16,7 @@ namespace Core.Models
         [Required, MaxLength(50)]
         public string LastName { get; set; }
         public string Phone { get; set; }
-        public string gender { get; set; }
+        public Gender gender { get; set; }
         [NotMapped]
         public IFormFile Image { get; set; }
         public DateOnly Dateofbirth { get; set; }

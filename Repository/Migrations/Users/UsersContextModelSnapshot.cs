@@ -90,8 +90,8 @@ namespace Repository.Migrations.Users
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("gender")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

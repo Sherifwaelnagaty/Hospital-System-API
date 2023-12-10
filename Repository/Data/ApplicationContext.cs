@@ -27,6 +27,8 @@ namespace Repository.Data
             new CouponsMap(modelBuilder.Entity<Coupons>());
             new AppointmentMap(modelBuilder.Entity<Appointment>());
             new BookingMap(modelBuilder.Entity<Booking>());
+            new PatientsMap(modelBuilder.Entity<Patients>());
+            new AdminMap(modelBuilder.Entity<Admin>());
             modelBuilder.Entity<Doctors>()
             .Property(d => d.Image)
             .HasConversion(new ValueConverter<IFormFile, string>(

@@ -33,7 +33,7 @@ namespace Repository.Migrations.Users
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    gender = table.Column<int>(type: "int", nullable: false),
                     Dateofbirth = table.Column<DateOnly>(type: "date", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

@@ -21,6 +21,17 @@ namespace Repository
             entities = context.Set<T>();
         }
 
+        public T AddPatient(T patientModel)
+        {
+            if (patientModel == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+            entities.Add(patientModel);
+            _context.SaveChanges();
+            return patientModel;
+
+        }
         public IEnumerable<T> GetAllPatients(int pageNumber, int pageSize)
         {
             if (pageNumber < 1)
