@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Models
 {
@@ -15,6 +16,7 @@ namespace Core.Models
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string gender { get; set; }
+        [NotMapped]
         public IFormFile Image { get; set; }
         public DateOnly Dateofbirth { get; set; }
     }

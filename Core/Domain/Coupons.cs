@@ -3,7 +3,7 @@ using System;
 namespace Core.Models;
 public class Coupons
 {
-    public String Id { get; set; }
+    public string Id { get; set; }
     public string Code { get; set; }
     public string DiscountType { get; set; }
     public int MaxUses { get; set; }
