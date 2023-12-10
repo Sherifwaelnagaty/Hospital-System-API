@@ -3,7 +3,7 @@ using Core.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service;
-//[Authorize]
+[Authorize(Roles = "Doctor")]
 [Route("api/[controller]")]
 [ApiController]
 public class AppointmentController : ControllerBase 
@@ -16,8 +16,15 @@ public class AppointmentController : ControllerBase
     [HttpPost("")]
     public IActionResult AddAppointment([FromBody] Appointment AppointmentModel)
     {
-        var couponId = _appointmentRepository.AddAppointment(AppointmentModel);
-        return Ok(couponId);
+        if (ModelState.IsValid)
+        {
+            var couponId = _appointmentRepository.AddAppointment(AppointmentModel);
+            return Ok(couponId);
+        }
+        else
+        {
+           return BadRequest("An Error has occured");
+        }
     }
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAppointmentById([FromRoute] string id, [FromBody] Appointment AppointmentModel)

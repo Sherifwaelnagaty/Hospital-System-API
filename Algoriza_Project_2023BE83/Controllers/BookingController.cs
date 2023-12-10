@@ -19,10 +19,17 @@ namespace Algoriza_Project_2023BE83.Controllers
         }
         [Authorize(Roles = "Patient")]
         [HttpGet("{id}")]
-        public IActionResult BookAppointment([FromBody]Booking model)
+        public IActionResult BookAppointment([FromBody] Booking model)
         {
-            var booked = _bookingService.BookAppointment(model);
-            return Ok(booked);
+            if (ModelState.IsValid)
+            {
+                var booked = _bookingService.BookAppointment(model);
+                return Ok(booked);
+            }
+            else
+            {
+                return BadRequest("An Error has occured");
+            }
         }
         [Authorize(Roles = "Doctor")]
         [HttpGet("doctor/{id}")]

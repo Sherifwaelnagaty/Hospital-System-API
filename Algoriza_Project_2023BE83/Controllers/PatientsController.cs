@@ -4,7 +4,7 @@ using Service;
 
 namespace Algoriza_Project_2023BE83.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class PatientsController : ControllerBase
@@ -30,7 +30,7 @@ namespace Algoriza_Project_2023BE83.Controllers
             }
             return Ok(Patient);
         }
-        [HttpGet("Numbers")]
+        [HttpGet("Dahsboard/Numbers")]
         public IActionResult GetNumberofPatients()
         {
             var Numbers = _PatientsService.GetNumbersofPatients();

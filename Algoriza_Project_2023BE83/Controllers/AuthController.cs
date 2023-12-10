@@ -1,5 +1,6 @@
 ﻿using Core.Models;
 using Core.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Algoriza_Project_2023BE83.Controllers
@@ -42,6 +43,7 @@ namespace Algoriza_Project_2023BE83.Controllers
             }
             return Ok(result);
         }
+        [Authorize(Roles ="Admin")]
         [HttpPost("addrole")]
         public async Task<IActionResult> AddRoleAsync([FromBody] AddRole model)
         {

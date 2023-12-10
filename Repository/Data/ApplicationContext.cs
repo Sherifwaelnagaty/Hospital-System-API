@@ -48,9 +48,6 @@ namespace Repository.Data
             .WithMany(d => d.Appointments)
             .HasForeignKey(a => a.DoctorId)
             .IsRequired();
-            modelBuilder.Entity<Coupons>()
-            .HasKey(c => c.Id)
-            .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             base.OnModelCreating(modelBuilder);
         }
     }

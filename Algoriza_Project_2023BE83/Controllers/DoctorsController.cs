@@ -57,14 +57,21 @@ public class DoctorsController : ControllerBase
         }
         return BadRequest("Error Happened");
     }
-    //[Authorize (Roles ="Admin")]
+    [Authorize (Roles ="Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDoctorById([FromRoute] string id, [FromBody] Doctors doctorModel)
     {
-        var doctor = await _doctorsService.UpdateDoctorById(id, doctorModel);
-        return Ok(doctor);
+        if (ModelState.IsValid)
+        {
+            var doctor = await _doctorsService.UpdateDoctorById(id, doctorModel);
+            return Ok(doctor);
+        }
+        else
+        {
+            return BadRequest("An Error has occured");
+        }
     }
-    //[Authorize (Roles ="Admin")]
+    [Authorize (Roles ="Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorById([FromRoute] string id)
     {
