@@ -51,10 +51,8 @@ namespace Repository
             if (Appointment != null)
             {
                 Appointment.Time = Model.Time;
-                Appointment.Date = Model.Date;
                 Appointment.Price = Model.Price;
                 Appointment.Days = Model.Days;
-                Appointment.Date = Model.Date;
                 await _context.SaveChangesAsync();
                 return Appointment;
             }

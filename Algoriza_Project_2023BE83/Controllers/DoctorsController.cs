@@ -19,7 +19,7 @@ public class DoctorsController : ControllerBase
     }
     //[Authorize (Roles ="Patient")]
     [HttpGet("")]
-    public IActionResult GetAllDoctors([FromRoute]int pageNumber,[FromRoute] int pageSize)
+    public IActionResult GetAllDoctors([FromRoute] int pageNumber, [FromRoute] int pageSize)
     {
         var doctors = _doctorsService.GetAllDoctors(pageNumber, pageSize);
         return Ok(doctors);
@@ -57,7 +57,7 @@ public class DoctorsController : ControllerBase
         }
         return BadRequest("Error Happened");
     }
-    [Authorize (Roles ="Admin")]
+    //[Authorize (Roles ="Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDoctorById([FromRoute] string id, [FromBody] Doctors doctorModel)
     {
@@ -71,7 +71,7 @@ public class DoctorsController : ControllerBase
             return BadRequest("An Error has occured");
         }
     }
-    [Authorize (Roles ="Admin")]
+    //[Authorize (Roles ="Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorById([FromRoute] string id)
     {

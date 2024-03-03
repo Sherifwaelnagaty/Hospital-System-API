@@ -4,7 +4,7 @@ using Service;
 using Core.Models;
 using Microsoft.AspNetCore.Authorization;
 namespace Algoriza_Project_2023BE83.Controllers;
-[Authorize(Roles ="Admin")]
+//[Authorize(Roles ="Admin")]
 [Route("api/[controller]")]
 [ApiController]
 public class CouponsController : ControllerBase

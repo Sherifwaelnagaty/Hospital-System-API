@@ -14,7 +14,6 @@ namespace Core.Models
         {
             entityBuilder.HasKey(t => t.Id);
             entityBuilder.Property(t => t.Days).IsRequired();
-            entityBuilder.Property(t => t.Date).IsRequired();
             entityBuilder.Property(t => t.Time).IsRequired();
             entityBuilder.Property(t => t.Price).IsRequired();
             entityBuilder.Property(t=>t.DoctorId).IsRequired();

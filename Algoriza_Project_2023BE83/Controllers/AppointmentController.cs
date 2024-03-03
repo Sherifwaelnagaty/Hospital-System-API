@@ -3,7 +3,7 @@ using Core.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service;
-[Authorize(Roles = "Doctor")]
+//[Authorize(Roles = "Doctor")]
 [Route("api/[controller]")]
 [ApiController]
 public class AppointmentController : ControllerBase 

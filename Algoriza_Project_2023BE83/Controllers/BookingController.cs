@@ -17,7 +17,7 @@ namespace Algoriza_Project_2023BE83.Controllers
         {
             _bookingService = bookingService;
         }
-        [Authorize(Roles = "Patient")]
+        //[Authorize(Roles = "Patient")]
         [HttpGet("{id}")]
         public IActionResult BookAppointment([FromBody] Booking model)
         {
@@ -31,21 +31,21 @@ namespace Algoriza_Project_2023BE83.Controllers
                 return BadRequest("An Error has occured");
             }
         }
-        [Authorize(Roles = "Doctor")]
+        //[Authorize(Roles = "Doctor")]
         [HttpGet("doctor/{id}")]
         public IActionResult GetBookingForDoctor(string doctorId)
         {
              var booked = _bookingService.GetBookingForDoctor(doctorId);
              return Ok(booked);
         }
-        [Authorize(Roles = "Patient")]
+        //[Authorize(Roles = "Patient")]
         [HttpGet("patient/{id}")]
         public IActionResult GetBookingForPatient(string patientId)
         {
             var booked = _bookingService.GetBookingForPatient(patientId);
             return Ok(booked);
         }
-        [Authorize(Roles = "Patient")]
+        //[Authorize(Roles = "Patient")]
         [HttpDelete("cancel/{id}")]
         public IActionResult CancelBookingbyId(string id)
         {
