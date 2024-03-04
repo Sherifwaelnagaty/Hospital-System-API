@@ -19,7 +19,7 @@ public class DoctorsController : ControllerBase
     }
     //[Authorize (Roles ="Patient")]
     [HttpGet("")]
-    public IActionResult GetAllDoctors([FromRoute] int pageNumber, [FromRoute] int pageSize)
+    public IActionResult GetAllDoctors([FromQuery] int pageNumber, [FromQuery] int pageSize)
     {
         var doctors = _doctorsService.GetAllDoctors(pageNumber, pageSize);
         return Ok(doctors);
