@@ -17,11 +17,11 @@ namespace Service.Service
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<Base> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JWT _jwt;
 
-        public AuthService(UserManager<Base> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWT> jwt)
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWT> jwt)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -36,7 +36,7 @@ namespace Service.Service
             if (await _userManager.FindByNameAsync(model.Username) is not null)
                 return new Auth { Message = "Username is already registered!" };
 
-            var user = new Base
+            var user = new ApplicationUser
             {
                 UserName = model.Username,
                 Email = model.Email,
@@ -111,7 +111,7 @@ namespace Service.Service
             return result.Succeeded ? string.Empty : "Sonething went wrong";
         }
 
-        private async Task<JwtSecurityToken> CreateJwtToken(Base user)
+        private async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);

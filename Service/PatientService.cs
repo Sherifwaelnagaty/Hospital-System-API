@@ -13,18 +13,18 @@ namespace Service
 {
     public class PatientService : IPatientsService
     {
-        private readonly IPatientsRepository <Patients> _patientsRepository;
+        private readonly IPatientsRepository <ApplicationUser> _patientsRepository;
 
-        public PatientService(IPatientsRepository<Patients> patientsRepository) 
+        public PatientService(IPatientsRepository<ApplicationUser> patientsRepository) 
         {
             patientsRepository = _patientsRepository;
         }
-        public IEnumerable<Patients> GetAllPatients(int pageNumber, int pageSize)
+        public IEnumerable<ApplicationUser> GetAllPatients(int pageNumber, int pageSize)
         {
             return _patientsRepository.GetAllPatients(pageNumber, pageSize);
         }
 
-        public Patients GetPatientById(string id)
+        public ApplicationUser GetPatientById(string id)
         {
             return _patientsRepository.GetPatientById(id);
 

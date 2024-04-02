@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.Models
 {
-    public class Auth:Base
+    public class Auth : ApplicationUser
     {
         public string Message { get; set; }
         public bool IsAuthenticated { get; set; }

@@ -9,8 +9,8 @@ namespace Service
 {
     public interface IPatientsService
     {
-        IEnumerable<Patients> GetAllPatients(int pageNumber, int pageSize);
-        Patients GetPatientById(string id);
+        IEnumerable<ApplicationUser> GetAllPatients(int pageNumber, int pageSize);
+        ApplicationUser GetPatientById(string id);
         Task<int> GetNumbersofPatients();
     }
 }

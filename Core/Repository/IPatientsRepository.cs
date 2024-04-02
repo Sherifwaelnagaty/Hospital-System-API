@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Repository
 {
-    public interface IPatientsRepository<T> where T : Patients
+    public interface IPatientsRepository<T> where T : ApplicationUser
     {
         T AddPatient(T patientmodel);
         IEnumerable<T> GetAllPatients(int pageNumber, int pageSize);

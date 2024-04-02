@@ -28,7 +28,7 @@ namespace Algoriza_Project_2023BE83
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<JWT>(Configuration.GetSection("JWT"));
-            services.AddIdentity<Base, IdentityRole>().AddEntityFrameworkStores<UsersContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<UsersContext>();
             services.AddDbContext<UsersContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();

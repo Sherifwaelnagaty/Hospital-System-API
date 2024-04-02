@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class PatientsRepository<T>:IPatientsRepository<T> where T : Patients
+    public class PatientsRepository<T>:IPatientsRepository<T> where T : ApplicationUser
     {
         private readonly ApplicationContext _context;
         private DbSet<T> entities;
