@@ -20,92 +20,97 @@ namespace Service.Service
         private readonly UserManager<Base> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JWT _jwt;
-        public AuthService(UserManager<Base> userManager, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager)
+
+        public AuthService(UserManager<Base> userManager, RoleManager<IdentityRole> roleManager, IOptions<JWT> jwt)
         {
             _userManager = userManager;
-            _jwt = jwt.Value;
             _roleManager = roleManager;
-        }
-
-        public async Task<string> AddRoleAsync(AddRole model)
-        {
-            var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user == null || !await _roleManager.RoleExistsAsync(model.Role))
-            {
-                return "Invalid user ID or Role";
-            }
-            if (await _userManager.IsInRoleAsync(user, model.Role))
-            {
-                return "User already assigned to this role";
-            }
-            var result = await _userManager.AddToRoleAsync(user, model.Role);
-
-            if (result.Succeeded)
-            {
-                return string.Empty;
-            }
-            return "Something went wrong";
-        }
-        public async Task<Auth> LoginAsync(Login model)
-        {
-            var auth = new Auth();
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-            {
-                auth.Message = "Email or Password is incorrect";
-                return auth;
-            }
-            var jwtSecurityToken = await CreateJwtToken(user);
-            var rolesList = await _userManager.GetRolesAsync(user);
-            auth.IsAuthenticated = true;
-            auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            auth.Email = user.Email;
-            auth.UserName = user.UserName;
-            auth.ExpiresOn = jwtSecurityToken.ValidTo;
-            auth.Roles = rolesList.ToList();
-            return auth;
+            _jwt = jwt.Value;
         }
 
         public async Task<Auth> RegisterAsync(Register model)
         {
             if (await _userManager.FindByEmailAsync(model.Email) is not null)
-            {
                 return new Auth { Message = "Email is already registered!" };
-            }
+
             if (await _userManager.FindByNameAsync(model.Username) is not null)
-            {
                 return new Auth { Message = "Username is already registered!" };
-            }
+
             var user = new Base
             {
                 UserName = model.Username,
                 Email = model.Email,
                 FirstName = model.FirstName,
-                LastName = model.LastName,
+                LastName = model.LastName
             };
+
             var result = await _userManager.CreateAsync(user, model.Password);
+
             if (!result.Succeeded)
             {
                 var errors = string.Empty;
+
                 foreach (var error in result.Errors)
-                {
                     errors += $"{error.Description},";
-                }
+
                 return new Auth { Message = errors };
             }
-            await _userManager.AddToRoleAsync(user, "Patient");
+
+            await _userManager.AddToRoleAsync(user, "User");
 
             var jwtSecurityToken = await CreateJwtToken(user);
+
             return new Auth
             {
                 Email = user.Email,
                 ExpiresOn = jwtSecurityToken.ValidTo,
                 IsAuthenticated = true,
-                Roles = new List<string> { "Patient" },
+                Roles = new List<string> { "User" },
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                UserName = user.UserName,
+                UserName = user.UserName
             };
         }
+
+        public async Task<Auth> LoginAsync(Login model)
+        {
+            var authModel = new Auth();
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user is null || !await _userManager.CheckPasswordAsync(user, model.Password))
+            {
+                authModel.Message = "Email or Password is incorrect!";
+                return authModel;
+            }
+
+            var jwtSecurityToken = await CreateJwtToken(user);
+            var rolesList = await _userManager.GetRolesAsync(user);
+
+            authModel.IsAuthenticated = true;
+            authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+            authModel.Email = user.Email;
+            authModel.UserName = user.UserName;
+            authModel.ExpiresOn = jwtSecurityToken.ValidTo;
+            authModel.Roles = rolesList.ToList();
+
+            return authModel;
+        }
+
+        public async Task<string> AddRoleAsync(AddRole model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+
+            if (user is null || !await _roleManager.RoleExistsAsync(model.Role))
+                return "Invalid user ID or Role";
+
+            if (await _userManager.IsInRoleAsync(user, model.Role))
+                return "User already assigned to this role";
+
+            var result = await _userManager.AddToRoleAsync(user, model.Role);
+
+            return result.Succeeded ? string.Empty : "Sonething went wrong";
+        }
+
         private async Task<JwtSecurityToken> CreateJwtToken(Base user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
@@ -129,7 +134,7 @@ namespace Service.Service
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
             var jwtSecurityToken = new JwtSecurityToken(
-            issuer: _jwt.Issuer,
+                issuer: _jwt.Issuer,
                 audience: _jwt.Audience,
                 claims: claims,
                 expires: DateTime.Now.AddDays(_jwt.DurationInDays),
@@ -138,5 +143,4 @@ namespace Service.Service
             return jwtSecurityToken;
         }
     }
-
 }

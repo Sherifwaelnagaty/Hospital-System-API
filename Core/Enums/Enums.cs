@@ -29,5 +29,11 @@ namespace Core.Enums
         Patient,
         Admin
    }
+   public enum BookingState
+   {
+        Pending,
+        Completed,
+        Cancelled
+   }
 
 }

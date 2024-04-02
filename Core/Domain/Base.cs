@@ -11,14 +11,17 @@ namespace Core.Models
     public class Base : IdentityUser
     {
 
-        [Required, MaxLength(50)]
-        public string FirstName { get; set; }
-        [Required, MaxLength(50)]
-        public string LastName { get; set; }
-        public string Phone { get; set; }
-        public Gender gender { get; set; }
-        [NotMapped]
-        public IFormFile Image { get; set; }
-        public DateOnly Dateofbirth { get; set; }
+        public string Image { get; set; }
+
+        [Required(ErrorMessage = "FullName is required.")]
+        public string FullName { get; set; }
+
+        [Required(ErrorMessage = "Gender is required.")]
+        [EnumDataType(typeof(Gender))]
+        public Gender Gender { get; set; }
+
+        [Required(ErrorMessage = "Date of Birth is required.")]
+        [DataType(DataType.Date)]
+        public DateTime DateOfBirth { get; set; }
     }
 }

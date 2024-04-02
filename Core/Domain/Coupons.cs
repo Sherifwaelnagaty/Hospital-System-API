@@ -6,15 +6,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Core.Models;
 public class Coupons
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public string Id { get; set; }
-    public string Code { get; set; }
-    public DiscountType DiscountType { get; set; }
-    public int MaxUses { get; set; }
-    public int Uses { get; set; }
-    public DateTime ExpirationDate { get; set; }
-    public bool IsEnabled { get; set; }
-    public string Value { get; set; }
 
+    [Required(ErrorMessage = "Code is required.")]
+    public string Code { get; set; }
+
+    [Required(ErrorMessage = "Value is required.")]
+    [InRange]
+    public int Value { get; set; }
+
+    [Required(ErrorMessage = "Discount Type is required.")]
+    [EnumDataType(typeof(DiscountType))]
+    public DiscountType DiscountType { get; set; }
+
+    [Required(ErrorMessage = "Minimum Requests is required.")]
+    [Range(0, int.MaxValue)]
+    public int MinimumRequiredBookings { get; set; }
+
+    public DateTime ExpirationDate { get; set; }
+
+    [Required(ErrorMessage = "IsActivated is required.")]
+    public bool IsEnabled { get; set; }
 }
