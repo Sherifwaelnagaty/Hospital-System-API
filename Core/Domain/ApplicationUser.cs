@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Models
 {
-    public class Base : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
 
         public string Image { get; set; }

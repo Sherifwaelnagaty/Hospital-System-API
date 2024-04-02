@@ -12,7 +12,6 @@ public class Coupons
     public string Code { get; set; }
 
     [Required(ErrorMessage = "Value is required.")]
-    [InRange]
     public int Value { get; set; }
 
     [Required(ErrorMessage = "Discount Type is required.")]
