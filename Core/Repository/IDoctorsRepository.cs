@@ -1,14 +1,16 @@
+using Core.DTO;
 using Core.Models;
+using Core.Repository;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 namespace Core.Service;
-public interface IDoctorsRepository<T> where T : Doctors
+public interface IDoctorsRepository: IDataOperationsRepository<Doctors>
 {
-    IEnumerable<T> GetAllDoctors(int pageNumber, int pageSize);
-    T GetDoctorById(string id);
-    T AddDoctor(T doctorModel);
-    Task<bool> UpdateDoctorById(string id, T doctorModel);
-    Task<bool> DeleteDoctorById(string id);
+    IActionResult GetAllDoctors(int pageNumber, int pageSize,Func<DoctorDTO, bool> criteria = null);
+    int GetDoctorById(string UserId);
+    IActionResult GetSpecificDoctorInfo(int doctorId);
     Task<int> GetNumberOfDoctors();
-    IEnumerable<T> GetTopDoctors();
+    public IActionResult GetTopDoctors();
 }

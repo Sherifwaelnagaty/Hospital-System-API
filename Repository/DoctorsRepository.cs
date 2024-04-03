@@ -1,93 +1,95 @@
-using Microsoft.EntityFrameworkCore;
 using Core.Service;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Models;
 using Repository.Data;
 using System;
-using System.Drawing.Printing;
-using System.Numerics;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Core.DTO;
+using System.Threading.Tasks;
 namespace Repository;
-public class DoctorsRepository<T> : IDoctorsRepository<T> where T : Doctors
+public class DoctorsRepository : DataOperationsRepository<Doctors>, IDoctorsRepository
 {
-    private readonly ApplicationContext _context;
-    private DbSet<T> entities;
+    private UserManager<ApplicationUser> _userManager;
 
-    public DoctorsRepository(ApplicationContext context)
+    public DoctorsRepository(ApplicationContext context, UserManager<ApplicationUser> userManager) : base(context)
     {
-        _context = context;
-        entities = context.Set<T>();
+        _userManager = userManager;
     }
-    public IEnumerable<T> GetAllDoctors(int pageNumber, int pageSize)
+    public IActionResult GetAllDoctors(int pageNumber, int pageSize, Func<DoctorDTO, bool> criteria = null)
     {
-        if (pageNumber < 1)
+        try
         {
-            throw new ArgumentException("Page number should be greater than or equal to 1.", nameof(pageNumber));
-        }
+            IEnumerable<DoctorDTO> fullDoctorsInfo = _context.Set<Doctors>()
+            .Join
+                                         (
+                                            _context.Users,
+                                            doctor => doctor.DoctorUserId,
+                                            user => user.Id,
+                                            (doctor, user) => new
+                                            {
+                                                Image = user.Image,
+                                                FullName = user.FullName,
+                                                Email = user.Email,
+                                                Phone = user.PhoneNumber,
+                                                Gender = Enum.GetName(user.Gender),
+                                                SpecializationId = doctor.SpecializationId
+                                            }
+                                        ).Join
+            (
+                                            _context.Specializations,
+                                            doctor => doctor.SpecializationId,
+                                            specialization => specialization.Id,
+                                            (doctor, specialization) => new DoctorDTO
+                                            {
+                                                ImagePath = doctor.Image,
+                                                FullName = doctor.FullName,
+                                                Email = doctor.Email,
+                                                Phone = doctor.Phone,
+                                                Gender = doctor.Gender,
+                                                Specialization = specialization.Name
+                                            }
+                                        );
+            if (criteria != null)
+            {
+                fullDoctorsInfo = fullDoctorsInfo.Where(criteria);
+            }
 
-        if (pageSize < 1)
+            if (pageNumber != 0)
+                fullDoctorsInfo = fullDoctorsInfo.Skip((pageNumber - 1) * pageSize);
+
+            if (pageSize != 0)
+                fullDoctorsInfo = fullDoctorsInfo.Take(pageSize);
+
+            return new OkObjectResult(fullDoctorsInfo.ToList());
+        }
+        catch (Exception ex)
         {
-            throw new ArgumentException("Page size should be greater than or equal to 1.", nameof(pageSize));
+            return new ObjectResult($"There is a problem during getting the data {ex.Message}")
+            {
+                StatusCode = 500
+            };
         }
+    }
 
-        // Calculate the number of items to skip
-        int itemsToSkip = (pageNumber - 1) * pageSize;
+    int IDoctorsRepository.GetDoctorById(string UserId)
+    {
+        throw new NotImplementedException();
+    }
 
-        // Use Skip and Take for pagination
-        return entities.Skip(itemsToSkip).Take(pageSize).AsEnumerable();
+    public IActionResult GetSpecificDoctorInfo(int doctorId)
+    {
+        throw new NotImplementedException();
+    }
 
-    }
-    public T GetDoctorById(string id)
+    IActionResult IDoctorsRepository.GetTopDoctors()
     {
-        return entities.SingleOrDefault(s => s.Id == id);
+        throw new NotImplementedException();
     }
-    public T AddDoctor(T doctorModel)
-    {
-        if (doctorModel == null)
-        {
-            throw new ArgumentNullException("entity");
-        }
-        entities.Add(doctorModel);
-        _context.SaveChanges();
-        return doctorModel;
 
-    }
-    public async Task<bool> UpdateDoctorById(string id, T doctorModel)
+    public Task<int> GetNumberOfDoctors()
     {
-        var doctor = await entities.FindAsync(id);
-        if (doctor != null)
-        {
-            doctor.gender = doctorModel.gender;
-            doctor.Email = doctorModel.Email;
-            doctor.FirstName = doctorModel.FirstName;
-            doctor.Image = doctorModel.Image;
-            doctor.LastName = doctorModel.LastName;
-            doctor.PhoneNumber = doctorModel.PhoneNumber;
-            doctor.Specialize = doctorModel.Specialize;
-            doctor.UserName = doctor.UserName;
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        return false;
-    }
-    public async Task<bool> DeleteDoctorById(string id)
-    {
-        var doctor = await entities.FindAsync(id);
-        if (doctor != null)
-        {
-            entities.Remove(doctor);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        return false;
-    }
-    public async Task<int> GetNumberOfDoctors()
-    {
-        return await entities.CountAsync();
-    }
-    public IEnumerable<T> GetTopDoctors()
-    {
-        return entities.OrderByDescending(d => d.Ratings).Take(10).AsEnumerable();
+        throw new NotImplementedException();
     }
 }
