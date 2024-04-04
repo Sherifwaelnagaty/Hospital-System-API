@@ -14,6 +14,8 @@ using Repository;
 using System.Security.Claims;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Drawing;
+using Core.Enums;
+using Core.Models;
 
 namespace Services
 {
@@ -35,7 +37,7 @@ namespace Services
         public async Task<IActionResult> AddUser(UserDTO userDTO, UserRole userRole)
         {
             ApplicationUser user = _mapper.Map<ApplicationUser>(userDTO);
-            string? Role = Enum.GetName(userRole);
+            string Role = Enum.GetName(userRole);
 
             if (Role == null)
             {

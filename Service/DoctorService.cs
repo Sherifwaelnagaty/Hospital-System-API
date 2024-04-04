@@ -7,10 +7,7 @@ using Core.Repository;
 using Core.Service;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using Repository;
 using Services;
-using System.Drawing.Printing;
-using System.Numerics;
 
 namespace Service
 {

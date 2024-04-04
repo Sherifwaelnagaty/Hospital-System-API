@@ -16,9 +16,9 @@ namespace Core.Repository
         public ICouponsRepository DiscountCodeCoupons { get; }
         public IAppointmentTimeRepository AppointmentTimes { get; }
         public IAppointmentRepository Appointments { get; }
-        public IBookingsRepository Bookings { get; }
+        public IBookingRepository Bookings { get; }
         public ISpecializationRepository Specializations { get; }
-        public IPatientRepository Patients { get; }
+        public IPatientsRepository Patients { get; }
         int Complete();
     }
 }

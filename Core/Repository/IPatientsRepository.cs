@@ -1,4 +1,6 @@
-﻿using Core.Models;
+﻿using Core.DTO;
+using Core.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +9,10 @@ using System.Threading.Tasks;
 
 namespace Core.Repository
 {
-    public interface IPatientsRepository<T> where T : ApplicationUser
+    public interface IPatientsRepository:IApplicationUserRepository
     {
-        T AddPatient(T patientmodel);
-        IEnumerable<T> GetAllPatients(int pageNumber, int pageSize);
-        T GetPatientById(string id);
-        Task<int> GetNumbersofPatients();
+        Task<IActionResult> GetAllPatients(int Page, int PageSize,
+                                Func<PatientDTO, bool> criteria = null);
+        bool IsExist(string id);
     }
 }

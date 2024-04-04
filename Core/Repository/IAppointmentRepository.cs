@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Core.Repository
 {
-    public interface IAppointmentRepository<T> where T : Appointment
+    public interface IAppointmentRepository:ICommonRepository<Appointment>
     {
-        T AddAppointment(T doctorModel);
-        Task<T> UpdateAppointmentById(string id, T doctorModel);
-        Task<bool> DeleteAppointmentById(string id);
+        Appointment GetByDoctorIdAndDay(int doctorId, DayOfWeek day);
     }
 }
