@@ -206,7 +206,7 @@ namespace Repository.Data
         public DbSet<AppointmentTime> AppointmentTimes { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Doctors> Doctors { get; set; }
-        public DbSet<Coupons> DiscountCodeCoupons { get; set; }
+        public DbSet<Coupons> Coupons { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
     }

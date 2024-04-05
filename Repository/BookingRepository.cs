@@ -1,57 +1,161 @@
 ﻿using Core.Domain;
+using Core.DTO;
 using Core.Models;
 using Core.Repository;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 
 namespace Repository
 {
-    public class BookingRepository<T> : IBookingRepository<T> where T : Booking
+    public class BookingRepository : CommonRepository<Booking>,IBookingRepository
     {
-        private readonly ApplicationContext _context;
-        private DbSet<T> entities;
-        public BookingRepository(ApplicationContext context) 
+        public BookingRepository(ApplicationContext context):base(context) 
         {
-            _context = context;
-            entities = _context.Set<T>();
+
         }
 
-        public T BookAppointment(T model)
+        public IActionResult GetDoctorBookings(int DoctorId, int Page, int PageSize, Func<BookingWithPatientDTO, bool> criteria = null)
         {
-            if (model == null)
+            throw new NotImplementedException();
+        }
+
+        public IActionResult GetPatientBookings(string PatientId)
+        {
+            try
             {
-                throw new ArgumentNullException("entity");
-            }
-            entities.Add(model);
-            _context.SaveChanges();
-            return model;
-        }
+                var bookings = _context.Bookings.Where(b => b.PatientId == PatientId);
 
-        public async Task<bool> CancelBookingbyId(string id)
-        {
-            var booking = await entities.FindAsync(id);
-            if(booking == null)
+                // get Appointment info
+                var bookingsWithAppointment = bookings.Join(
+                                     _context.AppointmentTimes,
+                                     b => b.AppointmentTimeId,
+                                     at => at.Id,
+                                     (b, at) => new
+                                     {
+                                         b.DoctorId,
+                                         b.BookingState,
+                                         b.CouponId,
+                                         at.AppointmentId,
+                                         Time = at.Time.ToString(),
+                                     }
+                                    ).Join
+                                    (
+                                        _context.Appointments,
+                                        b => b.AppointmentId,
+                                        a => a.Id,
+                                        (b, a) => new
+                                        {
+                                            b.DoctorId,
+                                            b.BookingState,
+                                            b.CouponId,
+                                            b.Time,
+                                            day = a.DayOfWeek.ToString()
+                                        }
+                                    );
+
+                // get coupon info -left join-
+
+                var bookingsWithCouponInfo = bookingsWithAppointment.GroupJoin(
+                                              _context.Coupons,
+                                              booking => booking.CouponId,
+                                              coupon => coupon.Id,
+                                              (booking, coupon) => new
+                                              {
+                                                  booking,
+                                                  coupon
+                                              }).SelectMany(
+                                                  coupon => coupon.coupon.DefaultIfEmpty(),
+                                                  (b, c) => new
+                                                  {
+                                                      b.booking.DoctorId,
+                                                      b.booking.BookingState,
+                                                      b.booking.day,
+                                                      b.booking.Time,
+                                                      DiscountType = (c == null) ? 0 : c.DiscountType,
+                                                      Value = (c == null) ? 0 : c.Value,
+                                                      Name = (c == null) ? "No Coupon" : c.Name
+                                                  }
+                                              );
+                // get doctor info
+                var bookingsWithDoctorsInfo = bookingsWithCouponInfo.Join(
+                                                _context.Doctors,
+                                                b => b.DoctorId,
+                                                d => d.Id,
+                                                (b, d) => new
+                                                {
+                                                    d.Price,
+                                                    d.DoctorUserId,
+                                                    d.SpecializationId,
+                                                    b.BookingState,
+                                                    b.day,
+                                                    b.Time,
+                                                    b.DiscountType,
+                                                    b.Value,
+                                                    b.Name
+                                                }
+                                              ).Join(
+                                                _context.Users,
+                                                b => b.DoctorUserId,
+                                                u => u.Id,
+                                                (b, u) => new
+                                                {
+                                                    u.FullName,
+                                                    b.Price,
+                                                    u.Image,
+                                                    b.SpecializationId,
+                                                    BookingState = b.BookingState.ToString(),
+                                                    b.day,
+                                                    b.Time,
+                                                    b.DiscountType,
+                                                    b.Value,
+                                                    b.Name
+                                                }
+                                              ).Join(
+                                                _context.Specializations,
+                                                b => b.SpecializationId,
+                                                s => s.Id,
+                                                (b, s) => new BookingWithhDoctorDTO
+                                                {
+                                                    price = b.Price,
+                                                    DoctorName = b.FullName,
+                                                    ImagePath = b.Image,
+                                                    Specialization = s.Name,
+                                                    BookingStatus = b.BookingState,
+                                                    Day = b.day,
+                                                    Time = b.Time,
+                                                    DiscountType = b.DiscountType,
+                                                    CouponValue = b.Value,
+                                                    discoundCodeName = b.Name
+                                                }
+                                              ).ToList();
+
+                return new OkObjectResult(bookingsWithDoctorsInfo);
+            }
+            catch (Exception ex)
             {
-                return false;
+                return new ObjectResult($"An error occurred while Getting Patient's Bookings \n: {ex.Message}")
+                {
+                    StatusCode = 500
+                };
             }
-            await _context.SaveChangesAsync();
-            return true;
         }
 
-        public IEnumerable<T> GetBookingForDoctor(string doctorId)
+        public int NumOfBooKings()
         {
-            return entities.Where(a => a.DoctorId == doctorId).AsEnumerable();
+            return _context.Bookings.Count();
         }
 
-        public IEnumerable<T> GetBookingForPatient(string patientId)
+        public int NumOfBookings(Expression<Func<Booking, bool>> criteria)
         {
-            return entities.Where(a => a.PatientId == patientId).AsEnumerable();
+            return _context.Bookings.Count(criteria);
         }
     }
 }

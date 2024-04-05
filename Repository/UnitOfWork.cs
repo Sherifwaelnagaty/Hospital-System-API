@@ -1,6 +1,7 @@
 ﻿using Core.Domain;
 using Core.Models;
 using Core.Repository;
+using Core.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Repository.Data;
@@ -20,16 +21,17 @@ namespace Repository
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public IDoctorRepository Doctors { get; private set; }
+        public IDoctorsRepository Doctors { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
-        public IDiscountCodeCouponRepository DiscountCodeCoupons { get; private set; }
+        public ICouponsRepository DiscountCodeCoupons { get; private set; }
         public IAppointmentRepository Appointments { get; private set; }
         public IAppointmentTimeRepository AppointmentTimes { get; private set; }
-        public IBookingsRepository Bookings { get; private set; }
+        public IBookingRepository Bookings { get; private set; }
         public ISpecializationRepository Specializations { get; private set; }
-        public IPatientRepository Patients { get; private set; }
+        public IPatientsRepository Patients { get; private set; }
 
-        public UnitOfWork(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
+
+        public UnitOfWork(ApplicationContext context, UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager) {
             
             #region initializations
@@ -40,16 +42,16 @@ namespace Repository
             #endregion
 
             #region DI
-            Doctors = new DoctorRepository(_context, userManager);
+            Doctors = new DoctorsRepository(_context, userManager);
             ApplicationUser = new ApplicationUserRepository(_context, _userManager,
                 _roleManager, _signInManager);
 
-            DiscountCodeCoupons = new DiscountCodeCouponRepository(_context);
+            DiscountCodeCoupons = new CouponsRepository(_context);
             Appointments = new AppointmentRepository(_context);
-            Bookings = new BookingsRepository(_context);
+            Bookings = new BookingRepository(_context);
             Specializations = new SpecializationRepository(_context);
             AppointmentTimes = new AppointmentTimeRepository(_context);  
-            Patients = new PatientRepository(_context,_userManager, _roleManager, _signInManager);
+            Patients = new PatientsRepository(_context,_userManager, _roleManager, _signInManager);
             #endregion
         }
         public int Complete()

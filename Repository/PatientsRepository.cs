@@ -1,63 +1,80 @@
-﻿using Core.Models;
+﻿using Core.DTO;
+using Core.Enums;
+using Core.Models;
 using Core.Repository;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Repository.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class PatientsRepository<T>:IPatientsRepository<T> where T : ApplicationUser
+    public class PatientsRepository : ApplicationUserRepository, IPatientsRepository
     {
-        private readonly ApplicationContext _context;
-        private DbSet<T> entities;
-        public PatientsRepository(ApplicationContext context) 
+
+        public PatientsRepository(ApplicationContext context,
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
+            SignInManager<ApplicationUser> signInManager) :
+            base(context, userManager, roleManager, signInManager)
         {
-            _context = context;
-            entities = context.Set<T>();
-        }
 
-        public T AddPatient(T patientModel)
-        {
-            if (patientModel == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
-            entities.Add(patientModel);
-            _context.SaveChanges();
-            return patientModel;
-
-        }
-        public IEnumerable<T> GetAllPatients(int pageNumber, int pageSize)
-        {
-            if (pageNumber < 1)
-            {
-                throw new ArgumentException("Page number should be greater than or equal to 1.", nameof(pageNumber));
-            }
-
-            if (pageSize < 1)
-            {
-                throw new ArgumentException("Page size should be greater than or equal to 1.", nameof(pageSize));
-            }
-
-            // Calculate the number of items to skip
-            int itemsToSkip = (pageNumber - 1) * pageSize;
-
-            // Use Skip and Take for pagination
-            return entities.Skip(itemsToSkip).Take(pageSize).AsEnumerable();
-        }
-
-        public T GetPatientById(string id)
-        {
-            return entities.SingleOrDefault(s => s.Id == id);
-        }
-        public Task<int> GetNumbersofPatients() 
-        {
-            return entities.CountAsync();
         }
     }
+
+    public async Task<IActionResult> GetAllPatients(int Page, int PageSize, Func<PatientDTO, bool> criteria = null)
+    {
+        // Get All patients
+        try
+        {
+            // Get patients
+            var patients = (await _userManager.
+                     GetUsersInRoleAsync(Enum.GetName(UserRole.Patient))).AsEnumerable();
+
+            // Drop unnecessary columns
+            IEnumerable<PatientDTO> DesiredPatients = patients.Select(p => new PatientDTO
+            {
+                ImagePath = p.Image,
+                FullName = p.FullName,
+                Email = p.Email,
+                Phone = p.PhoneNumber,
+                Gender = p.Gender.ToString(),
+                DateOfBirth = p.DateOfBirth.ToString()
+            });
+
+            // Apply criteria - if exists -
+            if (criteria != null)
+            {
+                DesiredPatients = DesiredPatients.Where(criteria);
+            }
+
+            // Apply Pagination 
+            if (Page != 0)
+                DesiredPatients = DesiredPatients.Skip((Page - 1) * PageSize);
+
+            if (PageSize != 0)
+                DesiredPatients = DesiredPatients.Take(PageSize);
+
+            return new OkObjectResult(DesiredPatients.ToList());
+        }
+        catch (Exception ex)
+        {
+            return new ObjectResult($"There is a problem during getting the data {ex.Message}")
+            {
+                StatusCode = 500
+            };
+        }
+    }
+
+        public bool IsExist(string id)
+        {
+            string PatientRoleName = UserRole.Patient.ToString();
+            string PatientRoleId = _context.Roles.
+                                        Where(r => r.Name == PatientRoleName)
+                                        .Select(r => r.Id).SingleOrDefault().ToString();
+
+            return _context.UserRoles.Any(x => x.UserId == id && x.RoleId == PatientRoleId);
+        }
 }
