@@ -151,7 +151,7 @@ namespace Service
                     return new NotFoundObjectResult($"No doctor found with id {id}");
                 }
 
-                var result = _unitOfWork.Doctors.GetSpecificDoctorInfo(id);
+                var result = _unitOfWork.Doctors.GetDoctorById(id);
                 if (result is not OkObjectResult okResult)
                 {
                     return result;
@@ -182,12 +182,12 @@ namespace Service
                 };
             }
         }
-        public Task<IActionResult> UpdateDoctorById(int id, UserDTO userDTO, string specialize)
+        public async Task<IActionResult> UpdateDoctorById(int id, UserDTO userDTO, string specialize)
         {
             try
             {
                 // Get Old Data
-                Doctor doctor = _unitOfWork.Doctors.GetById(id);
+                Doctors doctor = _unitOfWork.Doctors.GetById(id);
                 if (doctor == null)
                 {
                     return new NotFoundObjectResult($"There is no Doctor with id: {id}.");

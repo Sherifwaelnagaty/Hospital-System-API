@@ -1,14 +1,8 @@
 ﻿using Core.Domain;
+using Core.Enums;
 using Core.Repository;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Services
 {
     public class AppointmentTimeServices : IAppointmentTimeServices

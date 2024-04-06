@@ -40,8 +40,7 @@ namespace Service.Service
             {
                 UserName = model.Username,
                 Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName
+                FullName =model.FullName,
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

@@ -1,4 +1,7 @@
-﻿using Core.Models;
+﻿using Core.DTO;
+using Core.Enums;
+using Core.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +12,10 @@ namespace Service
 {
     public interface IDoctorService
     {
-        IEnumerable<Doctors> GetAllDoctors(int pageNumber, int pageSize);
-        Doctors GetDoctorById(string id);
-        Doctors AddDoctor(Doctors doctorModel);
-        Task<bool> UpdateDoctorById(string id, Doctors doctorModel);
-        Task<bool> DeleteDoctorById(string id);
-        Task<int> GetNumberOfDoctors();
-        IEnumerable<Doctors> GetTopDoctors();
+        public IActionResult GetTopDoctors();
+        Task<IActionResult> AddDoctor(UserDTO userDTO, UserRole patient, string specialize);
+        Task<IActionResult> DeleteDoctor(int id);
+        IActionResult GetDoctorById(int id);
+        IActionResult GetAllDoctors(int pageNumber, int pageSize, string search);
     }
 }

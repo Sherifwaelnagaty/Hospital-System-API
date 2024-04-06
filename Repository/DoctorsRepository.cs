@@ -73,10 +73,6 @@ public class DoctorsRepository : DataOperationsRepository<Doctors>, IDoctorsRepo
         }
     }
 
-    int IDoctorsRepository.GetDoctorById(string UserId)
-    {
-        throw new NotImplementedException();
-    }
 
     public IActionResult GetSpecificDoctorInfo(int doctorId)
     {
@@ -89,6 +85,26 @@ public class DoctorsRepository : DataOperationsRepository<Doctors>, IDoctorsRepo
     }
 
     public Task<int> GetNumberOfDoctors()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetDoctorIdByUserId(string UserId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IActionResult GetDoctorById(int doctorId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<ApplicationUser> GetDoctorUser(string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<string> GetDoctorIdFromClaim(ApplicationUser user)
     {
         throw new NotImplementedException();
     }

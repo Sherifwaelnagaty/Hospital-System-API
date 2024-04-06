@@ -15,6 +15,6 @@ public class CouponsRepository : DataOperationsRepository<Coupons>, ICouponsRepo
     }
     public Coupons GetByName(string CouponName)
     {
-        return _context.DiscountCodeCoupons.FirstOrDefault(s => s.Code == CouponName);
+        return _context.Coupons.FirstOrDefault(s => s.Code == CouponName);
     }
 }

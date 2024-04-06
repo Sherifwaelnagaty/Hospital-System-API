@@ -1,4 +1,6 @@
 ﻿using Core.Models;
+using Core.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public interface IPatientsService
+    public interface IPatientsService:IApplicationUserService
     {
-        IEnumerable<ApplicationUser> GetAllPatients(int pageNumber, int pageSize);
-        ApplicationUser GetPatientById(string id);
-        Task<int> GetNumbersofPatients();
+        IActionResult CancelBooking(int BookingId);
+        Task<IActionResult> GetAllPatients(int Page, int PageSize, string search);
+        IActionResult GetPatientBookings(string Id);
+        Task<IActionResult> GetById(string Id);
     }
 }
