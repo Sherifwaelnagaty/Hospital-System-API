@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace Service
 {
     public interface ICouponService
     {
-        Coupons AddCoupon(Coupons couponModel);
-        Task<Coupons> UpdateCoupon(string id, Coupons couponModel);
-        Task<bool> DeleteCoupon(string id);
-        Task<bool> DeactivateCoupon(string id);
+        Task<IActionResult> AddCoupon(Coupons couponModel);
+        IActionResult UpdateCoupon(Coupons couponModel);
+        IActionResult DeleteCoupon(int id);
+        IActionResult DeactivateCoupon(int id);
     }
 }

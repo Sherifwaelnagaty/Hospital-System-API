@@ -1,39 +1,111 @@
 ﻿using Core.Models;
 using Core.Repository;
-using Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Service
 {
     public class CouponsService : ICouponService
     {
-        private readonly ICouponsRepository<Coupons> _couponsRepository;
-        public CouponsService(ICouponsRepository<Coupons> couponsRepository) 
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CouponsService(IUnitOfWork UnitOfWork)
         {
-            _couponsRepository = couponsRepository;
-        }
-        public Coupons AddCoupon(Coupons couponModel)
-        {
-        return _couponsRepository.AddCoupon(couponModel);
+            _unitOfWork = UnitOfWork;
         }
 
-        public Task<bool> DeactivateCoupon(string id)
+        public async Task<IActionResult> AddCoupon(Coupons couponModel)
         {
-            return _couponsRepository.DeactivateCoupon(id);   
+            try
+            {
+                couponModel.Id = 0;
+                var result = await _unitOfWork.DiscountCodeCoupons.Add(couponModel);
+
+                _unitOfWork.Complete();
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                return new BadRequestObjectResult($"{ex.Message} \n {ex.InnerException?.Message}");
+            }
         }
 
-        public Task<bool> DeleteCoupon(string id)
+        public IActionResult DeactivateCoupon(int id)
         {
-            return _couponsRepository.DeleteCoupon(id);
+            try
+            {
+                Coupons coupon = _unitOfWork.DiscountCodeCoupons.GetById(id);
+                if (coupon == null)
+                {
+                    return new NotFoundObjectResult($"Id {id} is not found");
+                }
+
+                coupon.IsEnabled = false;
+                var result = _unitOfWork.DiscountCodeCoupons.Update(coupon);
+
+                _unitOfWork.Complete();
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                return new BadRequestObjectResult($"{ex.Message} \n {ex.InnerException?.Message}");
+            }
         }
 
-        public async Task<Coupons> UpdateCoupon(string id, Coupons couponModel)
+        public IActionResult DeleteCoupon(int Id)
         {
-            return await _couponsRepository.UpdateCoupon(id, couponModel);
+            try
+            {
+                Coupons coupon = _unitOfWork.DiscountCodeCoupons.GetById(Id);
+                if (coupon == null)
+                {
+                    return new NotFoundObjectResult($"Id {Id} is not found");
+                }
+
+                bool IsUsed = _unitOfWork.Bookings.IsExist(b => b.CouponId == Id);
+                if (IsUsed)
+                {
+                    return new BadRequestObjectResult("This coupon is already used, you can't update it");
+                }
+
+                var result = _unitOfWork.DiscountCodeCoupons.Delete(coupon);
+                _unitOfWork.Complete();
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                return new BadRequestObjectResult($"{ex.Message} \n {ex.InnerException?.Message}");
+            }
+        }
+
+        public IActionResult UpdateCoupon(Coupons couponModel)
+        {
+            try
+            {
+                bool IsCouponExist = _unitOfWork.DiscountCodeCoupons.IsExist(c => c.Id == couponModel.Id);
+                if (!IsCouponExist)
+                {
+                    return new NotFoundObjectResult($"Id {couponModel.Id} is not found");
+                }
+
+                bool IsUsed = _unitOfWork.Bookings.IsExist(b => b.CouponId == couponModel.Id);
+                if (IsUsed)
+                {
+                    return new BadRequestObjectResult("This coupon is already used, you can't update it");
+                }
+
+                var result = _unitOfWork.DiscountCodeCoupons.Update(couponModel);
+
+                _unitOfWork.Complete();
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                return new BadRequestObjectResult($"{ex.Message} \n {ex.InnerException?.Message}");
+            }
         }
 
     }
