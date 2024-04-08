@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Core.Models;
 public class Coupons
 {
-    public string Id { get; set; }
+    public int Id { get; set; }
 
     [Required(ErrorMessage = "Code is required.")]
     public string Code { get; set; }

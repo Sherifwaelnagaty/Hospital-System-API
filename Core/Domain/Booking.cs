@@ -28,7 +28,7 @@ namespace Core.Domain
         [ForeignKey("FK_Bookings_AspNetUsers_PatientId")]
         public string PatientId { get; set; }
 
-        [ForeignKey("FK_Bookings_DiscountCodeCoupons_DiscountCodeCouponId")]
+        [ForeignKey("FK_Bookings_Coupons_CouponId")]
         [AllowNull]
         public int CouponId { get; set; }
 

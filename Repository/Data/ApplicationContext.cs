@@ -63,7 +63,7 @@ namespace Repository.Data
             .WithMany()
             .HasForeignKey(b => b.CouponId)
             .OnDelete(DeleteBehavior.Restrict)
-            .HasConstraintName("FK_Bookings_DiscountCodeCoupons_DiscountCodeCouponId");
+            .HasConstraintName("FK_Bookings_Coupons_CouponId");
 
 
             modelBuilder.Entity<Booking>()

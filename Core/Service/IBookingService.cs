@@ -1,4 +1,5 @@
 ﻿using Core.Domain;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,7 @@ namespace Core.Service
 {
     public interface IBookingService
     {
-        Booking BookAppointment(Booking model);
-        IEnumerable<Booking> GetBookingForDoctor(string doctorId);
-        IEnumerable<Booking> GetBookingForPatient(string patientId);
-        Task<bool> CancelBookingbyId(string id);
+        IActionResult NumOfBookings();
+        IActionResult AddBookingToPatient(string PatientId, int AppointmentTimeId, string DiscountCodeCouponName);
     }
 }
