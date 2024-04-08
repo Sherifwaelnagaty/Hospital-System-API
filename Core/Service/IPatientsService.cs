@@ -12,7 +12,7 @@ namespace Service
     public interface IPatientsService:IApplicationUserService
     {
         IActionResult CancelBooking(int BookingId);
-        Task<IActionResult> GetAllPatients(int Page, int PageSize, string search);
+        Task<IActionResult> GetAllPatients(int pageNumber, int pageSize, string search);
         IActionResult GetPatientBookings(string Id);
         Task<IActionResult> GetById(string Id);
     }

@@ -22,51 +22,6 @@ namespace Repository
         {
 
         }
-    }
-
-    public async Task<IActionResult> GetAllPatients(int Page, int PageSize, Func<PatientDTO, bool> criteria = null)
-    {
-        // Get All patients
-        try
-        {
-            // Get patients
-            var patients = (await _userManager.
-                     GetUsersInRoleAsync(Enum.GetName(UserRole.Patient))).AsEnumerable();
-
-            // Drop unnecessary columns
-            IEnumerable<PatientDTO> DesiredPatients = patients.Select(p => new PatientDTO
-            {
-                ImagePath = p.Image,
-                FullName = p.FullName,
-                Email = p.Email,
-                Phone = p.PhoneNumber,
-                Gender = p.Gender.ToString(),
-                DateOfBirth = p.DateOfBirth.ToString()
-            });
-
-            // Apply criteria - if exists -
-            if (criteria != null)
-            {
-                DesiredPatients = DesiredPatients.Where(criteria);
-            }
-
-            // Apply Pagination 
-            if (Page != 0)
-                DesiredPatients = DesiredPatients.Skip((Page - 1) * PageSize);
-
-            if (PageSize != 0)
-                DesiredPatients = DesiredPatients.Take(PageSize);
-
-            return new OkObjectResult(DesiredPatients.ToList());
-        }
-        catch (Exception ex)
-        {
-            return new ObjectResult($"There is a problem during getting the data {ex.Message}")
-            {
-                StatusCode = 500
-            };
-        }
-    }
 
         public bool IsExist(string id)
         {
@@ -77,4 +32,49 @@ namespace Repository
 
             return _context.UserRoles.Any(x => x.UserId == id && x.RoleId == PatientRoleId);
         }
+        public async Task<IActionResult> GetAllPatients(int pageNumber, int pageSize, Func<PatientDTO, bool> criteria = null)
+        {
+            // Get All patients
+            try
+            {
+                // Get patients
+                var patients = (await _userManager.
+                         GetUsersInRoleAsync(Enum.GetName(UserRole.Patient))).AsEnumerable();
+
+                // Drop unnecessary columns
+                IEnumerable<PatientDTO> DesiredPatients = patients.Select(p => new PatientDTO
+                {
+                    ImagePath = p.Image,
+                    FullName = p.FullName,
+                    Email = p.Email,
+                    Phone = p.PhoneNumber,
+                    Gender = p.Gender.ToString(),
+                    DateOfBirth = p.DateOfBirth.ToString()
+                });
+
+                // Apply criteria - if exists -
+                if (criteria != null)
+                {
+                    DesiredPatients = DesiredPatients.Where(criteria);
+                }
+
+                // Apply Pagination 
+                if (pageNumber != 0)
+                    DesiredPatients = DesiredPatients.Skip((pageNumber - 1) * pageSize);
+
+                if (pageSize != 0)
+                    DesiredPatients = DesiredPatients.Take(pageSize);
+
+                return new OkObjectResult(DesiredPatients.ToList());
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult($"There is a problem during getting the data {ex.Message}")
+                {
+                    StatusCode = 500
+                };
+            }
+
+        }
+    }
 }

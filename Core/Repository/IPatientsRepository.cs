@@ -11,7 +11,7 @@ namespace Core.Repository
 {
     public interface IPatientsRepository:IApplicationUserRepository
     {
-        Task<IActionResult> GetAllPatients(int Page, int PageSize,
+        Task<IActionResult> GetAllPatients(int pageNumber, int pageSize,
                                 Func<PatientDTO, bool> criteria = null);
         bool IsExist(string id);
     }

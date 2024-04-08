@@ -18,7 +18,7 @@ namespace Service
             return ChangeBookingState(BookingId, BookingState.Cancelled);
         }
 
-        public async Task<IActionResult> GetAllPatients(int Page, int PageSize, string search)
+        public async Task<IActionResult> GetAllPatients(int pageNumber, int pageSize, string search)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace Service
                                 d.DateOfBirth.Contains(search));
 
                 // get patients
-                var gettingPatientsResult = await _unitOfWork.Patients.GetAllPatients(Page, PageSize, criteria);
+                var gettingPatientsResult = await _unitOfWork.Patients.GetAllPatients(pageNumber, pageSize, criteria);
                 if (gettingPatientsResult is not OkObjectResult patientsResult)
                 {
                     return gettingPatientsResult;
