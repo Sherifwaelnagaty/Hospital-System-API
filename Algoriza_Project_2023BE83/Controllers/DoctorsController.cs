@@ -1,5 +1,6 @@
 using Core.DTO;
 using Core.Models;
+using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,12 @@ namespace Algoriza_Project_2023BE83.Controllers;
 public class DoctorsController : ControllerBase
 {
     private readonly IDoctorService _doctorsService;
-    private readonly IWebHostEnvironment _webHostEnvironment;
-    public DoctorsController(IDoctorService doctorsService, IWebHostEnvironment webHostEnvironment)
+    private readonly IAppointmentTimeServices _appointmentTimeServices;
+
+    public DoctorsController(IDoctorService doctorsService, IAppointmentTimeServices appointmentTimeServices)
     {
         _doctorsService = doctorsService;
-        _webHostEnvironment = webHostEnvironment;
+        _appointmentTimeServices = appointmentTimeServices;
     }
     //[Authorize (Roles ="Patient")]
     [HttpGet("")]
@@ -47,7 +49,7 @@ public class DoctorsController : ControllerBase
             {
                 string folder = "Images/Doctors";
                 folder += doctorModel.Image.FileName;
-                string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);   
+                // string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);   
             }
             //var id = _doctorsService.AddDoctor(doctorModel);
             //if (id == null)
@@ -78,5 +80,75 @@ public class DoctorsController : ControllerBase
             return BadRequest("An Error Has Occured ,Try Again");
         }
         return Ok(Numbers);
+    }
+    [HttpPost("Appointments")]
+    [Authorize(Roles = "Doctor")]
+    public async Task<IActionResult> AddAppointments(AppointmentsDTO appointments)
+    {
+        if (appointments == null)
+        {
+            return BadRequest("Price and appointment are required");
+
+        }
+
+        if (appointments.Price <= 0)
+        {
+            return BadRequest("Invalid Price");
+        }
+
+        if (appointments.days == null)
+        {
+            return BadRequest("Appointments is required");
+        }
+
+        string? doctorId = (User.Claims.FirstOrDefault(c => c.Type == "DoctorId")?.Value);
+
+        if (int.TryParse(doctorId, out int id))
+        {
+            return _doctorsService.AddAppointments(id, appointments);
+        }
+        else
+        {
+            return new ObjectResult("There is a problem in current user data\n Invalid DoctorId")
+            {
+                StatusCode = 500
+            };
+        }
+    }
+
+    [HttpPatch("Appointment")]
+    [Authorize(Roles = "Doctor")]
+    public IActionResult DeleteAppointment([FromForm] int TimeId, [FromForm] string NewTime)
+    {
+        if (TimeId == 0)
+        {
+            ModelState.AddModelError("TimeId", "Time Id is required");
+        }
+
+        if (string.IsNullOrEmpty(NewTime))
+        {
+            ModelState.AddModelError("NewTime", "NewTime Id is required");
+        }
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        return _appointmentTimeServices.UpdateAppointment(TimeId, NewTime);
+    }
+
+    [HttpDelete("Appointment")]
+    [Authorize(Roles = "Doctor")]
+    public IActionResult DeleteAppointment([FromForm] int TimeId)
+    {
+        if (TimeId == 0)
+        {
+            ModelState.AddModelError("TimeId", "Time Id is required");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        return _appointmentTimeServices.DeleteAppointment(TimeId);
     }
 }

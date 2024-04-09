@@ -17,5 +17,7 @@ namespace Service
         Task<IActionResult> DeleteDoctorById(int id);
         IActionResult GetDoctorById(int id);
         IActionResult GetAllDoctors(int pageNumber, int pageSize, string search);
+        IActionResult AddAppointments(int DoctorId, AppointmentsDTO appointments);
+
     }
 }

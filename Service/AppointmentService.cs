@@ -1,6 +1,10 @@
-﻿using Core.Models;
+﻿using Core.DTO;
+using Core.Enums;
+using Core.Models;
 using Core.Repository;
 using Core.Service;
+using Core.Services;
+using Microsoft.AspNetCore.Mvc;
 using Repository;
 using System;
 using System.Collections.Generic;
@@ -12,24 +16,101 @@ namespace Service
 {
     public class AppointmentService : IAppointmentService
     {
-        private readonly IAppointmentRepository<Appointment> _appointmentrepository;
-        public AppointmentService(IAppointmentRepository<Appointment> appointmentrepository) 
+        private readonly IAppointmentTimeServices _timeServices;
+        private readonly IUnitOfWork _unitOfWork;
+        public AppointmentService(IAppointmentTimeServices timeServices, IUnitOfWork unitOfWork) 
         {
-            _appointmentrepository = appointmentrepository;
-        }
-        public Appointment AddAppointment(Appointment doctorModel)
-        {
-            return _appointmentrepository.AddAppointment(doctorModel);
+            _timeServices = timeServices;
+            _unitOfWork = unitOfWork;
         }
 
-        public Task<bool> DeleteAppointmentById(string id)
+        public IActionResult AddDays(int doctorId, List<Day> appointments)
         {
-            return _appointmentrepository.DeleteAppointmentById(id);
+            IActionResult result;
+            foreach (var day in appointments)
+            {
+                result = AddDay(doctorId, day);
+                if (result is not OkResult)
+                {
+                    return result;
+                }
+            }
+            return new OkResult();
         }
 
-        public Task<Appointment> UpdateAppointmentById(string id, Appointment doctorModel)
+        private IActionResult ConvertStringToDayOfWeek(string day)
         {
-            return _appointmentrepository.UpdateAppointmentById(id, doctorModel);
+            DayOfWeek DayOfWeek;
+            if (Enum.TryParse(day, true, out DayOfWeek))
+            {
+                return new OkObjectResult(DayOfWeek);
+            }
+            else
+            {
+                return new BadRequestObjectResult("Day is invalid");
+            }
+        }
+        private IActionResult AddDay(int doctorId, Day Day)
+        {
+            try
+            {
+                if (Day.Times == null)
+                {
+                    return new BadRequestObjectResult($"Inter Time Slots for day {Day.day}");
+                }
+
+                var result = ConvertStringToDayOfWeek(Day.day);
+
+                if (result is not OkObjectResult okResult)
+                {
+                    return result;
+                }
+                Days DayOfWeek = (Days)okResult.Value;
+
+                // Get Appointment data if it exist 
+                Appointment appointment = _unitOfWork.Appointments.GetByDoctorIdAndDay(doctorId, DayOfWeek);
+                int DayId = 0;
+                if (appointment == null)
+                {
+                    appointment = new Appointment()
+                    {
+                        DoctorId = doctorId,
+                        DayOfWeek = DayOfWeek,
+                    };
+                }
+                else
+                {
+                    DayId = appointment.Id;
+                }
+
+                // Add Appointment
+
+                if (DayId == 0)
+                {
+                    _unitOfWork.Appointments.Add(appointment);
+                    _unitOfWork.Complete();
+                    DayId = _unitOfWork.Appointments.GetByDoctorIdAndDay(appointment.DoctorId, appointment.DayOfWeek).Id;
+                }
+                else
+                {
+                    _unitOfWork.Appointments.Update(appointment);
+                }
+
+
+                // add Appointment times
+                IActionResult addingDayTimesResult = _timeServices.AddDayTimes(DayId, Day.Times);
+                if (addingDayTimesResult is not OkResult)
+                {
+                    return addingDayTimesResult;
+                }
+
+                return new OkResult();
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult($"There is a problem while Adding {Day} \n {ex.Message}" +
+                     $"\n {ex.InnerException?.Message}");
+            }
         }
     }
 }

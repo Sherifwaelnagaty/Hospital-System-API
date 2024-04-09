@@ -1,4 +1,6 @@
-﻿using Core.Models;
+﻿using Core.DTO;
+using Core.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +11,6 @@ namespace Core.Service
 {
     public interface IAppointmentService
     {
-        Appointment AddAppointment(Appointment doctorModel);
-        Task<Appointment> UpdateAppointmentById(string id, Appointment doctorModel);
-        Task<bool> DeleteAppointmentById(string id);
+        IActionResult AddDays(int doctorId, List<Day> appointments);
     }
 }

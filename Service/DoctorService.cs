@@ -8,6 +8,7 @@ using Core.Service;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using System.Numerics;
 
 namespace Service
 {
@@ -227,6 +228,41 @@ namespace Service
         public IActionResult GetTopDoctors()
         {
             return _unitOfWork.Doctors.GetTopDoctors();
+        }
+
+        public IActionResult AddAppointments(int DoctorId, AppointmentsDTO appointments)
+        {
+            //  set doctor price
+            var SettingPriceResult = SetPrice(DoctorId, appointments.Price);
+            if (SettingPriceResult is not OkObjectResult)
+            {
+                return SettingPriceResult;
+            }
+
+            // set DayOfWeek 
+            var AddingDayOfWeekResult = _appointmentServices.AddDays(DoctorId, appointments.days);
+            if (AddingDayOfWeekResult is not OkResult)
+            {
+                return AddingDayOfWeekResult;
+            }
+
+            _unitOfWork.Complete();
+            return new OkObjectResult("Price & Appointments Added Successfully");
+        }
+        private IActionResult SetPrice(int doctorId, decimal price)
+        {
+            Doctors doctor = _unitOfWork.Doctors.GetById(doctorId);
+            if (doctor == null)
+            {
+                return new NotFoundObjectResult($"Doctor with id {doctorId} is not found");
+
+            }
+
+            doctor.Price = price;
+
+            var updatingResult = _unitOfWork.Doctors.Update(doctor);
+            return updatingResult;
+
         }
     }
 }
