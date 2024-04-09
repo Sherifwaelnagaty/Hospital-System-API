@@ -66,7 +66,7 @@ namespace Service
                 };
             }
         }
-        public async Task<IActionResult> DeleteDoctor(int id)
+        public async Task<IActionResult> DeleteDoctorById(int id)
         {
             // delete doctor (it will delete user also because the delete action is on cascade
             try
