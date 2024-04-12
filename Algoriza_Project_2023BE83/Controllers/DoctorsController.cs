@@ -1,8 +1,8 @@
 using Core.DTO;
+using Core.Enums;
 using Core.Models;
 using Core.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using System.Drawing.Printing;
@@ -24,52 +24,101 @@ public class DoctorsController : ControllerBase
     [HttpGet("")]
     public IActionResult GetAllDoctors([FromQuery] int pageNumber, [FromQuery] int pageSize, string search)
     {
-        var doctors = _doctorsService.GetAllDoctors(pageNumber, pageSize,search);
-        return Ok(doctors);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        return _doctorsService.GetAllDoctors(pageNumber, pageSize, search);
     }
     //[Authorize (Roles ="Patient")]
     [HttpGet("{id}")]
     public  IActionResult GetDoctorById([FromRoute] int id)
     {
-        var doctor =  _doctorsService.GetDoctorById(id);
-        if (doctor == null)
+        if (id == 0)
         {
-            return NotFound();
+            ModelState.AddModelError("Id", "Id is required");
         }
-        return Ok(doctor);
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        return _doctorsService.GetDoctorById(id);
     }
 
-    //[Authorize (Roles ="Admin")]
-    [HttpPost("")]
-    public IActionResult AddDoctor([FromBody] UserDTO doctorModel)
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> AddDoctor([FromForm] UserDTO userDTO, [FromForm] string Specialize)
     {
-        if (ModelState.IsValid)
+
+        if (string.IsNullOrEmpty(Specialize))
         {
-            if (doctorModel.Image != null)
-            {
-                string folder = "Images/Doctors";
-                folder += doctorModel.Image.FileName;
-                // string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);   
-            }
-            //var id = _doctorsService.AddDoctor(doctorModel);
-            //if (id == null)
-            //{
-                //return BadRequest("An Error has occured");
-            //}
-            // return CreatedAtAction(nameof(GetDoctorById), new { id = id, controllers = "doctors" }, id);
+            ModelState.AddModelError("Specialize", "Specialize Is Required");
         }
-        return BadRequest("Error Happened");
+        if (userDTO.Image == null || userDTO.Image.Length == 0)
+        {
+            ModelState.AddModelError("userDTO.Image", "Image Is Required");
+        }
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        };
+
+        return await _doctorsService.AddDoctor(userDTO, UserRole.Patient, Specialize);
+    }
+
+    [HttpPut]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UpdateDoctorById([FromForm] int id, [FromForm] UserDTO userDTO, [FromForm] string Specialize)
+    {
+        if (string.IsNullOrEmpty(Specialize))
+        {
+            ModelState.AddModelError("Specialize", "Specialize Is Required");
+        }
+        if (userDTO.Image == null || userDTO.Image.Length == 0)
+        {
+            ModelState.AddModelError("userDTO.Image", "Image Is Required");
+        }
+
+        if (id == 0)
+        {
+            ModelState.AddModelError("Id", "Id Is Required");
+        }
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        };
+
+        return await _doctorsService.UpdateDoctorById(id, userDTO, Specialize);
     }
     //[Authorize (Roles ="Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorById([FromRoute] int id)
     {
-        var doctor = await _doctorsService.DeleteDoctorById(id);
-        if(true) 
+        try
         {
-            return Ok("Doctor's Account Deleted Successfully");
+            if (id == 0)
+            {
+                ModelState.AddModelError("id", "id Is Required");
+            }
+            else if (id < 0)
+            {
+                ModelState.AddModelError("id", "id Is Invalid. Id must be greater than 0");
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            };
+            return await _doctorsService.DeleteDoctorById(id);
         }
-        return BadRequest("An Error has occured");
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"An error occurred while Deleting the Doctor:\n" +
+                $"  {ex.Message} \n  {ex.Message}");
+        }
     }
     [HttpGet("Dashboard/top")]
     public IActionResult GetTopDoctors()

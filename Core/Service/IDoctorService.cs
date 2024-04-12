@@ -14,6 +14,7 @@ namespace Service
     {
         public IActionResult GetTopDoctors();
         Task<IActionResult> AddDoctor(UserDTO userDTO, UserRole patient, string specialize);
+        Task<IActionResult> UpdateDoctorById(int id, UserDTO userDTO, string specialize);
         Task<IActionResult> DeleteDoctorById(int id);
         IActionResult GetDoctorById(int id);
         IActionResult GetAllDoctors(int pageNumber, int pageSize, string search);
