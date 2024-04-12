@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Core.Enums;
 using Core.Service;
+using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service;
+using System.Drawing.Printing;
 using System.Security.Claims;
 
 namespace Algoriza_Project_2023BE83.Controllers
@@ -16,39 +19,42 @@ namespace Algoriza_Project_2023BE83.Controllers
         private readonly IPatientsService _PatientsService;
         private readonly IBookingService _bookingsServices;
         private readonly IDoctorService _doctorServices;
+        private readonly IApplicationUserService _applicationUserService;
 
         public PatientsController(IPatientsService PatientServices,
-            IBookingService bookingsServices, IDoctorService doctorServices)
+            IBookingService bookingsServices, IDoctorService doctorServices, 
+            IApplicationUserService applicationUserService)
         {
             _PatientsService = PatientServices;
             _bookingsServices = bookingsServices;
             _doctorServices = doctorServices;
+            _applicationUserService = applicationUserService;
         }
         [HttpGet("")]
-        public IActionResult GetAllPatients([FromRoute]int pageNumber,[FromRoute] int pageSize)
+        public async Task<IActionResult> GetAllPatients(int pageNumber,int pageSize,string search)
         {
-            var Patients = _PatientsService.GetAllPatients(pageNumber, pageSize);
-            return Ok(Patients);
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return await _PatientsService.GetAllPatients(pageNumber, pageSize, search);
         }
         [HttpGet("{id}")]
-        public IActionResult GetPatientById([FromRoute] string id)
+        public async Task<IActionResult> GetPatientById(string id)
         {
-            var Patient = _PatientsService.GetPatientById(id);
-            if (Patient == null)
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest(ModelState);
             }
-            return Ok(Patient);
+            return await _PatientsService.GetPatientById(id);
         }
         [HttpGet("Dahsboard/Numbers")]
-        public IActionResult GetNumberofPatients()
+        public IActionResult GetNumberOfPatients()
         {
-            var Numbers = _PatientsService.GetNumbersofPatients();
-            if(Numbers == null)
-            {
-                return BadRequest("An Error Has Occured ,Try Again");
-            }
-            return Ok(Numbers);
+            string Role = Enum.GetName(UserRole.Patient);
+
+            return _applicationUserService.GetUsersCountInRole(Role).Result;
         }
         [HttpGet("Bookings")]
         [Authorize(Roles = "Patient")]
@@ -67,7 +73,7 @@ namespace Algoriza_Project_2023BE83.Controllers
 
         [HttpPost("Booking")]
         [Authorize(Roles = "Patient")]
-        public IActionResult AddBooking([FromForm] int TimeId, [FromForm] string? CouponName)
+        public IActionResult AddBooking([FromForm] int TimeId, [FromForm] string CouponName)
         {
 
             if (TimeId == 0)
