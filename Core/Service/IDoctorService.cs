@@ -19,6 +19,9 @@ namespace Service
         IActionResult GetDoctorById(int id);
         IActionResult GetAllDoctors(int pageNumber, int pageSize, string search);
         IActionResult AddAppointments(int DoctorId, AppointmentsDTO appointments);
+        IActionResult ConfirmCheckUp(int BookingId);
+        IActionResult GetDoctorBookings(string DoctorUserId, int Page, int PageSize,
+                                        string search);
 
     }
 }

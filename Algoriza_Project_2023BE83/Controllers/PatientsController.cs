@@ -15,10 +15,8 @@ namespace Algoriza_Project_2023BE83.Controllers
     [ApiController]
     public class PatientsController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly IPatientsService _PatientsService;
         private readonly IBookingService _bookingsServices;
-        private readonly IDoctorService _doctorServices;
         private readonly IApplicationUserService _applicationUserService;
 
         public PatientsController(IPatientsService PatientServices,
@@ -27,7 +25,6 @@ namespace Algoriza_Project_2023BE83.Controllers
         {
             _PatientsService = PatientServices;
             _bookingsServices = bookingsServices;
-            _doctorServices = doctorServices;
             _applicationUserService = applicationUserService;
         }
         [HttpGet("")]

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 using System.Drawing.Printing;
+using System.Security.Claims;
 namespace Algoriza_Project_2023BE83.Controllers;
 
 [Route("api/[controller]")]
@@ -167,7 +168,7 @@ public class DoctorsController : ControllerBase
 
     [HttpPatch("Appointment")]
     [Authorize(Roles = "Doctor")]
-    public IActionResult DeleteAppointment([FromForm] int TimeId, [FromForm] string NewTime)
+    public IActionResult UpdateAppointmentById([FromForm] int TimeId, [FromForm] string NewTime)
     {
         if (TimeId == 0)
         {
@@ -182,12 +183,12 @@ public class DoctorsController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        return _appointmentTimeServices.UpdateAppointment(TimeId, NewTime);
+        return _appointmentTimeServices.UpdateAppointmentById(TimeId, NewTime);
     }
 
     [HttpDelete("Appointment")]
     [Authorize(Roles = "Doctor")]
-    public IActionResult DeleteAppointment([FromForm] int TimeId)
+    public IActionResult DeleteAppointmentById([FromForm] int TimeId)
     {
         if (TimeId == 0)
         {
@@ -198,6 +199,25 @@ public class DoctorsController : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        return _appointmentTimeServices.DeleteAppointment(TimeId);
+        return _appointmentTimeServices.DeleteAppointmentById(TimeId);
+    }
+    [HttpPatch("Booking/Confirm")]
+    [Authorize(Roles = "Doctor")]
+    public IActionResult ConfirmBooking([FromForm] int BookingId)
+    {
+        return _doctorsService.ConfirmCheckUp(BookingId);
+    }
+
+    [HttpGet("Bookings")]
+    [Authorize(Roles = "Doctor")]
+    public IActionResult GetDoctorsBookings(int page, int pageSize, string search)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        string? DoctorId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        return _doctorsService.GetDoctorBookings(DoctorId, page, pageSize, search);
     }
 }
