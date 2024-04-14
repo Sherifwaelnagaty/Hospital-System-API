@@ -66,7 +66,7 @@ namespace Services
             return Convert.ToDateTime(strTime).TimeOfDay; ;
         }
 
-        public IActionResult DeleteAppointment(int TimeId)
+        public IActionResult DeleteAppointmentById(int TimeId)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Services
             }
         }
 
-        public IActionResult UpdateAppointment(int TimeId, string NewTime)
+        public IActionResult UpdateAppointmentById(int TimeId, string NewTime)
         {
             try
             {
@@ -140,7 +140,5 @@ namespace Services
                 };
             }
         }
-
-
     }
 }

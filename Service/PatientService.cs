@@ -66,7 +66,7 @@ namespace Service
             }
         }
 
-        public async Task<IActionResult> GetById(string Id)
+        public async Task<IActionResult> GetPatientById(string Id)
         {
             try
             {
