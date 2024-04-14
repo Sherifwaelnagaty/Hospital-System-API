@@ -12,6 +12,9 @@ using Repository.Helpers;
 using Core.Models;
 using Repository.Data;
 using Core.Repository;
+using Core.Services;
+using DependencyInjection;
+using Services;
 
 namespace Algoriza_Project_2023BE83
 {
@@ -32,17 +35,16 @@ namespace Algoriza_Project_2023BE83
             services.AddDbContext<UsersContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
-            services.AddTransient<IAuthService,AuthService>();
-            services.AddScoped(typeof(IDoctorsRepository<>), typeof(DoctorsRepository<>));
-            services.AddTransient<IDoctorService,DoctorService>();
-            services.AddScoped(typeof(ICouponsRepository<>), typeof(CouponsRepository<>));
-            services.AddTransient<ICouponService,CouponsService>();
-            services.AddScoped(typeof(IAppointmentRepository<>), typeof(AppointmentRepository<>));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IApplicationUserService, ApplicationUserService>();
+            services.AddTransient<IAppointmentTimeServices, AppointmentTimeServices>();
             services.AddTransient<IAppointmentService, AppointmentService>();
-            services.AddScoped(typeof(IPatientsRepository<>), typeof(PatientsRepository<>));
             services.AddTransient<IPatientsService, PatientService>();
-            services.AddScoped(typeof(IBookingRepository<>), typeof(BookingRepository<>));
+            services.AddTransient<IDoctorService, DoctorService>();
             services.AddTransient<IBookingService, BookingService>();
+            services.AddTransient<ICouponService, CouponsService>();
+            services.AddTransient<ISpecializationServices, SpecializationServices>();
+            services.AddTransient<IEmailServices, EmailServices>();
             services.AddMvc();
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
